@@ -1,13 +1,12 @@
 Name:           bash-completion
 Version:        20050121
 Release:        2
-Epoch:          0
 Summary:        Programmable completion for Bash
 
 Group:          System Environment/Shells
 License:        GPL
 URL:            http://www.caliban.org/bash/
-Source0:     http://www.caliban.org/files/bash/bash-completion-20050121.tar.bz2
+Source0:        http://www.caliban.org/files/bash/bash-completion-20050121.tar.bz2
 Source1:        %{name}.profile
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
