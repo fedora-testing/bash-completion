@@ -1,6 +1,6 @@
 Name:           bash-completion
-Version:        0.0
-Release:        0.fdr.3.20041017
+Version:        20041017
+Release:        5
 Epoch:          0
 Summary:        Programmable completion for Bash
 
@@ -128,6 +128,13 @@ fi
 
 
 %changelog
+* Sat Nov 27 2004 Ville Skyttä <ville.skytta at iki.fi> - 0:20041017-5
+- Change version scheme, bump release to provide Extras upgrade path.
+
+* Sat Nov  6 2004 Ville Skyttä <ville.skytta at iki.fi> 0:0.0-0.fdr.4.20041017
+- Do the right thing with bash >= 3 too in profile.d snippet (bug 2228, thanks
+  to Thorsten Leemhuis).
+
 * Mon Oct 18 2004 Ville Skyttä <ville.skytta at iki.fi> 0:0.0-0.fdr.3.20041017
 - Update to 20041017, adds dhclient, lvm, and bittorrent completion.
 

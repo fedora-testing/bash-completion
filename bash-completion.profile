@@ -3,7 +3,8 @@
 
 # check for correct version of bash
 bash=${BASH_VERSION%.*}; bmajor=${bash%.*}; bminor=${bash#*.}
-if [ $bmajor -eq 2 ] && [ $bminor '>' 04 ] && [ -r /etc/bash_completion ]; then
+if [ -r /etc/bash_completion ] && \
+   [ $bmajor -eq 2 -a $bminor '>' 04 -o $bmajor -gt 2 ] ; then
     # source completion code
     . /etc/bash_completion
 fi
