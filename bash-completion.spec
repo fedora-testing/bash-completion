@@ -1,13 +1,13 @@
 Name:           bash-completion
 Version:        0.0
-Release:        0.fdr.3.20040711
+Release:        0.fdr.3.20041017
 Epoch:          0
 Summary:        Programmable completion for Bash
 
 Group:          System Environment/Shells
 License:        GPL
 URL:            http://www.caliban.org/bash/
-Source0:     http://www.caliban.org/files/bash/bash-completion-20040711.tar.bz2
+Source0:     http://www.caliban.org/files/bash/bash-completion-20041017.tar.bz2
 Source1:        %{name}.profile
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -46,6 +46,13 @@ cd -
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+
+%triggerin -- bittorrent
+if [ ! -e %{_sysconfdir}/bash_completion.d/bittorrent ] ; then
+  ln -s %{_datadir}/%{name}/bittorrent %{_sysconfdir}/bash_completion.d
+fi
+%triggerun -- bittorrent
+[ $2 -gt 0 ] || rm -f %{_sysconfdir}/bash_completion.d/bittorrent
 
 %triggerin -- cksfv
 if [ ! -e %{_sysconfdir}/bash_completion.d/cksfv ] ; then
@@ -121,6 +128,9 @@ fi
 
 
 %changelog
+* Mon Oct 18 2004 Ville Skyttä <ville.skytta at iki.fi> 0:0.0-0.fdr.3.20041017
+- Update to 20041017, adds dhclient, lvm, and bittorrent completion.
+
 * Mon Jul 12 2004 Ville Skyttä <ville.skytta at iki.fi> 0:0.0-0.fdr.3.20040711
 - Update to 20040711, patches applied upstream.
 
