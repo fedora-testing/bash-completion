@@ -1,0 +1,10 @@
+--- bash_completion~	2005-01-04 08:37:42.000000000 +0200
++++ bash_completion	2005-01-05 01:16:06.683299242 +0200
+@@ -3179,6 +3179,7 @@
+ 	local config
+ 
+ 	config=/etc/ssl/openssl.cnf
++	[ ! -f $config ] && config=/usr/share/ssl/openssl.cnf
+ 	for (( i=2; i < COMP_CWORD; i++ )); do
+ 		if [[ "${COMP_WORDS[i]}" == -config ]]; then
+ 			config=${COMP_WORDS[i+1]}

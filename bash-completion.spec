@@ -1,14 +1,15 @@
 Name:           bash-completion
-Version:        20041017
-Release:        5
+Version:        20050103
+Release:        1
 Epoch:          0
 Summary:        Programmable completion for Bash
 
 Group:          System Environment/Shells
 License:        GPL
 URL:            http://www.caliban.org/bash/
-Source0:     http://www.caliban.org/files/bash/bash-completion-20041017.tar.bz2
+Source0:     http://www.caliban.org/files/bash/bash-completion-20050103.tar.bz2
 Source1:        %{name}.profile
+Patch0:         %{name}-openssl-cnf.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -21,6 +22,7 @@ of the programmable completion feature of bash 2.
 
 %prep
 %setup -q -n bash_completion
+%patch0
 
 
 %build
@@ -128,6 +130,9 @@ fi
 
 
 %changelog
+* Wed Jan  5 2005 Ville Skyttä <ville.skytta at iki.fi> - 0:20050103-1
+- Update to 20050103.
+
 * Sat Nov 27 2004 Ville Skyttä <ville.skytta at iki.fi> - 0:20041017-5
 - Change version scheme, bump release to provide Extras upgrade path.
 
