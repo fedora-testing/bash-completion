@@ -1,0 +1,17 @@
+--- bash_completion~	2005-07-12 22:13:02.000000000 +0300
++++ bash_completion	2005-07-18 18:53:12.000000000 +0300
+@@ -89,3 +89,3 @@
+ complete -f -X '!*.@(dvi|DVI)' dvips dviselect dvitype
+-complete -f -X '!*.@(pdf|PDF)' acroread gpdf xpdf kpdf
++complete -f -X '!*.@(pdf|PDF)' acroread gpdf xpdf kpdf evince
+ complete -f -X '!*.@(?(e)ps|?(E)PS)' ps2pdf
+@@ -108,5 +108,8 @@
+ complete -f -X '!*.@(?([xX]|[sS])[hH][tT][mM]?([lL]))' netscape mozilla lynx opera galeon curl dillo elinks amaya
+-complete -f -X '!*.@(sxw|stw|sxg|doc|dot|rtf|txt|htm|html|odt|ott)' oowriter  
++complete -f -X '!*.@(sxw|stw|sxg|sgl|doc|dot|rtf|txt|htm|html|odt|ott|odm)' oowriter
+ complete -f -X '!*.@(sxi|sti|pps|ppt|pot|odp|otp)' ooimpress
+ complete -f -X '!*.@(sxc|stc|xls|xlw|xlt|csv|ods|ots)' oocalc
++complete -f -X '!*.@(sxd|std|sda|sdd|odg|otg)' oodraw
++complete -f -X '!*.@(sxm|smf|mml|odf)' oomath
++complete -f -X '!*.odb' oobase
+ complete -f -X '!*.rpm' rpm2cpio

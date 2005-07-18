@@ -1,6 +1,6 @@
 Name:           bash-completion
 Version:        20050712
-Release:        1%{?dist}
+Release:        1
 Summary:        Programmable completion for Bash
 
 Group:          System Environment/Shells
@@ -8,10 +8,13 @@ License:        GPL
 URL:            http://www.caliban.org/bash/
 Source0:        http://www.caliban.org/files/bash/%{name}-%{version}.tar.bz2
 Source1:        %{name}.profile
+Patch0:         %{name}-tarballs.patch
+Patch1:         %{name}-players.patch
+Patch2:         %{name}-documents.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
-Requires:       bash >= 0:2.05-12
+Requires:       bash >= 2.05-12
 
 %description
 bash-completion is a collection of shell functions that take advantage
@@ -20,6 +23,9 @@ of the programmable completion feature of bash 2.
 
 %prep
 %setup -q -n bash_completion
+%patch0
+%patch1
+%patch2
 
 
 %build
@@ -127,8 +133,11 @@ fi
 
 
 %changelog
-* Tue Jul 12 2005 Ville Skyttä <ville.skytta at iki.fi> - 20050712-1
+* Mon Jul 18 2005 Ville Skyttä <ville.skytta at iki.fi> - 20050712-1
 - 20050712.
+- Add more OO.o2 extensions, and *.pdf for evince (#163520, Horst von Brand).
+- Add/fix support for some multimedia formats and players.
+- Fix tarball completion.
 
 * Sat Jan 22 2005 Ville Skyttä <ville.skytta at iki.fi> - 0:20050121-2
 - Update to 20050121.
