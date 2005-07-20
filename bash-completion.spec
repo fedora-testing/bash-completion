@@ -1,6 +1,6 @@
 Name:           bash-completion
-Version:        20050712
-Release:        1
+Version:        20050720
+Release:        1%{?dist}
 Summary:        Programmable completion for Bash
 
 Group:          System Environment/Shells
@@ -8,9 +8,6 @@ License:        GPL
 URL:            http://www.caliban.org/bash/
 Source0:        http://www.caliban.org/files/bash/%{name}-%{version}.tar.bz2
 Source1:        %{name}.profile
-Patch0:         %{name}-tarballs.patch
-Patch1:         %{name}-players.patch
-Patch2:         %{name}-documents.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -23,9 +20,6 @@ of the programmable completion feature of bash 2.
 
 %prep
 %setup -q -n bash_completion
-%patch0
-%patch1
-%patch2
 
 
 %build
@@ -133,6 +127,9 @@ fi
 
 
 %changelog
+* Wed Jul 20 2005 Ville Skyttä <ville.skytta at iki.fi> - 20050720-1
+- 20050720, all patches applied upstream.
+
 * Mon Jul 18 2005 Ville Skyttä <ville.skytta at iki.fi> - 20050712-1
 - 20050712.
 - Add more OO.o2 extensions, and *.pdf for evince (#163520, Horst von Brand).
