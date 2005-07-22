@@ -1,5 +1,5 @@
 Name:           bash-completion
-Version:        20050720
+Version:        20050721
 Release:        1%{?dist}
 Summary:        Programmable completion for Bash
 
@@ -127,6 +127,9 @@ fi
 
 
 %changelog
+* Fri Jul 22 2005 Ville Skyttä <ville.skytta at iki.fi> - 20050721-1
+- 20050721.
+
 * Wed Jul 20 2005 Ville Skyttä <ville.skytta at iki.fi> - 20050720-1
 - 20050720, all patches applied upstream.
 
