@@ -1,6 +1,6 @@
 Name:           bash-completion
 Version:        20050721
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Programmable completion for Bash
 
 Group:          System Environment/Shells
@@ -8,6 +8,10 @@ License:        GPL
 URL:            http://www.caliban.org/bash/
 Source0:        http://www.caliban.org/files/bash/%{name}-%{version}.tar.bz2
 Source1:        %{name}.profile
+Source2:        %{name}-mock
+Source3:        %{name}-repomanage
+Source4:        %{name}-plague-client
+Patch0:         %{name}-20050721-cvs-stat.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -20,6 +24,10 @@ of the programmable completion feature of bash 2.
 
 %prep
 %setup -q -n bash_completion
+%patch0
+install -pm 644 %{SOURCE2} contrib/mock
+install -pm 644 %{SOURCE3} contrib/plague-client
+install -pm 644 %{SOURCE3} contrib/repomanage
 
 
 %build
@@ -46,87 +54,50 @@ cd -
 rm -rf $RPM_BUILD_ROOT
 
 
-%triggerin -- bittorrent
-if [ ! -e %{_sysconfdir}/bash_completion.d/bittorrent ] ; then
-  ln -s %{_datadir}/%{name}/bittorrent %{_sysconfdir}/bash_completion.d
-fi
-%triggerun -- bittorrent
-[ $2 -gt 0 ] || rm -f %{_sysconfdir}/bash_completion.d/bittorrent
+%define bashcomp_trigger() \
+%triggerin -- %1\
+if [ ! -e %{_sysconfdir}/bash_completion.d/%{?2}%{!?2:%1} ] ; then\
+  ln -s %{_datadir}/%{name}/%{?2}%{!?2:%1} %{_sysconfdir}/bash_completion.d\
+fi\
+%triggerun -- %1\
+[ $2 -gt 0 ] || rm -f %{_sysconfdir}/bash_completion.d/%{?2}%{!?2:%1}\
+%{nil}
 
-%triggerin -- cksfv
-if [ ! -e %{_sysconfdir}/bash_completion.d/cksfv ] ; then
-  ln -s %{_datadir}/%{name}/cksfv %{_sysconfdir}/bash_completion.d
-fi
-%triggerun -- cksfv
-[ $2 -gt 0 ] || rm -f %{_sysconfdir}/bash_completion.d/cksfv
-
-%triggerin -- freeciv
-if [ ! -e %{_sysconfdir}/bash_completion.d/freeciv ] ; then
-  ln -s %{_datadir}/%{name}/freeciv %{_sysconfdir}/bash_completion.d
-fi
-%triggerun -- freeciv
-[ $2 -gt 0 ] || rm -f %{_sysconfdir}/bash_completion.d/freeciv
-
-%triggerin -- gkrellm
-if [ ! -e %{_sysconfdir}/bash_completion.d/gkrellm ] ; then
-  ln -s %{_datadir}/%{name}/gkrellm %{_sysconfdir}/bash_completion.d
-fi
-%triggerun -- gkrellm
-[ $2 -gt 0 ] || rm -f %{_sysconfdir}/bash_completion.d/gkrellm
-
-%triggerin -- mailman
-if [ ! -e %{_sysconfdir}/bash_completion.d/mailman ] ; then
-  ln -s %{_datadir}/%{name}/mailman %{_sysconfdir}/bash_completion.d
-fi
-%triggerun -- mailman
-[ $2 -gt 0 ] || rm -f %{_sysconfdir}/bash_completion.d/mailman
-
-%triggerin -- mcrypt
-if [ ! -e %{_sysconfdir}/bash_completion.d/mcrypt ] ; then
-  ln -s %{_datadir}/%{name}/mcrypt %{_sysconfdir}/bash_completion.d
-fi
-%triggerun -- mcrypt
-[ $2 -gt 0 ] || rm -f %{_sysconfdir}/bash_completion.d/mcrypt
-
-%triggerin -- mtx
-if [ ! -e %{_sysconfdir}/bash_completion.d/mtx ] ; then
-  ln -s %{_datadir}/%{name}/mtx %{_sysconfdir}/bash_completion.d
-fi
-%triggerun -- mtx
-[ $2 -gt 0 ] || rm -f %{_sysconfdir}/bash_completion.d/mtx
-
-%triggerin -- subversion
-if [ ! -e %{_sysconfdir}/bash_completion.d/subversion ] ; then
-  ln -s %{_datadir}/%{name}/subversion %{_sysconfdir}/bash_completion.d
-fi
-%triggerun -- subversion
-[ $2 -gt 0 ] || rm -f %{_sysconfdir}/bash_completion.d/subversion
-
-%triggerin -- unace
-if [ ! -e %{_sysconfdir}/bash_completion.d/unace ] ; then
-  ln -s %{_datadir}/%{name}/unace %{_sysconfdir}/bash_completion.d
-fi
-%triggerun -- unace
-[ $2 -gt 0 ] || rm -f %{_sysconfdir}/bash_completion.d/unace
-
-%triggerin -- unrar
-if [ ! -e %{_sysconfdir}/bash_completion.d/unrar ] ; then
-  ln -s %{_datadir}/%{name}/unrar %{_sysconfdir}/bash_completion.d
-fi
-%triggerun -- unrar
-[ $2 -gt 0 ] || rm -f %{_sysconfdir}/bash_completion.d/unrar
+%bashcomp_trigger bittorrent
+%bashcomp_trigger cksfv
+%bashcomp_trigger freeciv
+%bashcomp_trigger gkrellm
+%bashcomp_trigger mailman
+%bashcomp_trigger mcrypt
+%bashcomp_trigger mock
+%bashcomp_trigger mtx
+%bashcomp_trigger plague-client
+%bashcomp_trigger subversion
+%bashcomp_trigger unace
+%bashcomp_trigger unrar
+%bashcomp_trigger yum-utils repomanage
 
 
 %files -f %{name}-ghosts.list
-%defattr(0644,root,root,0755)
+%defattr(-,root,root,-)
 %doc BUGS Changelog COPYING README
-%config %{_sysconfdir}/bash_completion
-%attr(0755,root,root) %config %{_sysconfdir}/profile.d/*
-%{_datadir}/%{name}
-%dir %{_sysconfdir}/bash_completion.d
+%config(noreplace) %{_sysconfdir}/profile.d/bash_completion.sh
+%{_sysconfdir}/bash_completion
+%dir %{_sysconfdir}/bash_completion.d/
+%{_datadir}/%{name}/
 
 
 %changelog
+* Mon Nov 28 2005 Ville Skyttä <ville.skytta at iki.fi> - 20050721-2
+- Work around potential login problem in profile.d snippet (#174355).
+
+* Sat Nov 26 2005 Ville Skyttä <ville.skytta at iki.fi>
+- Don't mark the main source file as %%config.
+- Make profile.d snippet non-executable (#35714) and noreplace.
+- Add mock, plague-client and repomanage completion.
+- Allow "cvs stat" completion.
+- Macroize trigger creation.
+
 * Fri Jul 22 2005 Ville Skyttä <ville.skytta at iki.fi> - 20050721-1
 - 20050721.
 

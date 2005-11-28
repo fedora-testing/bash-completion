@@ -1,0 +1,33 @@
+# bash completion for mock                                           -*- sh -*-
+
+_mock()
+{
+    local cur prev
+
+    COMPREPLY=()
+    cur=${COMP_WORDS[COMP_CWORD]}
+    prev=${COMP_WORDS[COMP_CWORD-1]}
+
+    case $prev in
+        --@(result|state)dir)
+            _filedir -d
+            return 0
+            ;;
+        -r)
+            COMPREPLY=( $( command ls /etc/mock | \
+                sed -ne 's/^\('$cur'.*\)\.cfg$/\1/p') )
+            return 0
+            ;;
+        -@(-arch|-uniqueext|-help|h))
+            return 0
+            ;;
+    esac
+
+    if [[ "$cur" == -* ]] ; then
+        COMPREPLY=( $( compgen -W '--version -h --help -r --no-clean --arch \
+            --debug --resultdir --statedir --uniqueext' -- $cur ) )
+    else
+        _filedir '?(no)src.rpm'
+    fi
+}
+complete -F _mock $filenames mock

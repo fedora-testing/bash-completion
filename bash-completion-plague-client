@@ -1,0 +1,16 @@
+# bash completion for plague-client                                  -*- sh -*-
+
+_plague_client()
+{
+    local cur
+
+    COMPREPLY=()
+    cur=${COMP_WORDS[COMP_CWORD]}
+
+    [ $COMP_CWORD = 1 ] && \
+    COMPREPLY=( $( compgen -W 'build detail finish help is_paused kill list \
+        list_builders pause requeue unpause update_builders' -- $cur ) )
+
+    return 0
+}
+complete -F _plague_client plague-client

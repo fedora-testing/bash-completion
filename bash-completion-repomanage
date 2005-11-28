@@ -1,0 +1,24 @@
+# bash completion for repomanage                                     -*- sh -*-
+
+_repomanage()
+{
+    local cur prev
+
+    COMPREPLY=()
+    cur=${COMP_WORDS[COMP_CWORD]}
+    prev=${COMP_WORDS[COMP_CWORD-1]}
+
+    case $prev in
+        -@(h|-help|k|-keep))
+            return 0
+            ;;
+    esac
+
+    if [[ "$cur" == -* ]] ; then
+        COMPREPLY=( $( compgen -W '-o --old -n --new -s --space -k --keep \
+            -c --nocheck -h --help' -- $cur ) )
+    else
+        _filedir -d
+    fi
+}
+complete -F _repomanage repomanage

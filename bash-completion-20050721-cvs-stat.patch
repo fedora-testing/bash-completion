@@ -1,0 +1,20 @@
+--- bash_completion~	2005-07-21 22:21:22.000000000 +0300
++++ bash_completion	2005-09-21 17:25:01.000000000 +0300
+@@ -1544,7 +1544,7 @@
+ 			@(rtag|rfreeze))
+ 				mode=rtag
+ 				;;
+-			st?(atus))
++			st?(at?(us)))
+ 				mode=status
+ 				;;
+ 			@(tag|freeze))
+@@ -1697,7 +1697,7 @@
+ 					   commit diff delete edit export \
+ 					   freeze get history import log new \
+ 					   patch rcs rdiff release remove \
+-					   rfreeze rlog rm rtag status tag \
++					   rfreeze rlog rm rtag stat status tag \
+ 					   unedit up update -H -Q -q -b -d -e \
+ 					   -f -l -n -t -r -v -w -x -z --help \
+ 					   --version' -- $cur ) )
