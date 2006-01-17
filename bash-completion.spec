@@ -1,6 +1,6 @@
 Name:           bash-completion
 Version:        20050721
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Programmable completion for Bash
 
 Group:          System Environment/Shells
@@ -12,6 +12,7 @@ Source2:        %{name}-mock
 Source3:        %{name}-repomanage
 Source4:        %{name}-plague-client
 Patch0:         %{name}-20050721-cvs-stat.patch
+Patch1:         %{name}-20050721-bash31quoting.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -25,6 +26,7 @@ of the programmable completion feature of bash 2.
 %prep
 %setup -q -n bash_completion
 %patch0
+%patch1 -p1
 install -pm 644 %{SOURCE2} contrib/mock
 install -pm 644 %{SOURCE3} contrib/plague-client
 install -pm 644 %{SOURCE3} contrib/repomanage
@@ -88,6 +90,9 @@ fi\
 
 
 %changelog
+* Sun Jan  8 2006 Ville Skyttä <ville.skytta at iki.fi> - 20050721-3
+- Patch to hopefully fix quoting problems with bash 3.1 (#177056).
+
 * Mon Nov 28 2005 Ville Skyttä <ville.skytta at iki.fi> - 20050721-2
 - Work around potential login problem in profile.d snippet (#174355).
 
