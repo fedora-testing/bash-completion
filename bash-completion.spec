@@ -13,6 +13,7 @@ Source3:        %{name}-repomanage
 Source4:        %{name}-plague-client
 Patch0:         %{name}-20050721-cvs-stat.patch
 Patch1:         %{name}-20050721-bash31quoting.patch
+Patch2:         %{name}-20050721-mtr.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -27,6 +28,7 @@ of the programmable completion feature of bash 2.
 %setup -q -n bash_completion
 %patch0
 %patch1 -p1
+%patch2
 install -pm 644 %{SOURCE2} contrib/mock
 install -pm 644 %{SOURCE3} contrib/plague-client
 install -pm 644 %{SOURCE3} contrib/repomanage
@@ -90,6 +92,9 @@ fi\
 
 
 %changelog
+* Sat Feb  4 2006 Ville Skyttä <ville.skytta at iki.fi>
+- Add mtr(8) completion using known hosts (#179918, Yanko Kaneti).
+
 * Sun Jan  8 2006 Ville Skyttä <ville.skytta at iki.fi> - 20050721-3
 - Patch to hopefully fix quoting problems with bash 3.1 (#177056).
 
