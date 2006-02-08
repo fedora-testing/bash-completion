@@ -1,6 +1,6 @@
 Name:           bash-completion
 Version:        20050721
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Programmable completion for Bash
 
 Group:          System Environment/Shells
@@ -69,15 +69,21 @@ fi\
 
 %bashcomp_trigger bittorrent
 %bashcomp_trigger cksfv
+%bashcomp_trigger clisp
 %bashcomp_trigger freeciv
+%bashcomp_trigger gcc-gnat gnatmake
 %bashcomp_trigger gkrellm
 %bashcomp_trigger mailman
 %bashcomp_trigger mcrypt
 %bashcomp_trigger mock
 %bashcomp_trigger mtx
 %bashcomp_trigger plague-client
+%bashcomp_trigger ruby-ri ri
+%bashcomp_trigger sbcl
+%bashcomp_trigger snownews
 %bashcomp_trigger subversion
 %bashcomp_trigger unace
+%bashcomp_trigger unixODBC isql
 %bashcomp_trigger unrar
 %bashcomp_trigger yum-utils repomanage
 
@@ -92,6 +98,10 @@ fi\
 
 
 %changelog
+* Wed Feb  8 2006 Ville Skyttä <ville.skytta at iki.fi> - 20050721-4
+- Don't source ourselves in non-interactive shells (#180419, Behdad Esfahbod).
+- Trigger-install snippets for clisp, gnatmake, isql, ri, sbcl, and snownews.
+
 * Sat Feb  4 2006 Ville Skyttä <ville.skytta at iki.fi>
 - Add mtr(8) completion using known hosts (#179918, Yanko Kaneti).
 
