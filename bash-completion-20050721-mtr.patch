@@ -1,7 +1,0 @@
---- bash_completion~	2005-07-21 22:21:22.000000000 +0300
-+++ bash_completion	2006-02-04 21:05:17.000000000 +0200
-@@ -2492,3 +2492,3 @@
- complete -F _known_hosts traceroute traceroute6 tracepath tracepath6 \
--	ping fping telnet host nslookup rsh rlogin ftp dig ssh-installkeys
-+	ping fping telnet host nslookup rsh rlogin ftp dig ssh-installkeys mtr
- 

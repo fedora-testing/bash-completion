@@ -1,19 +1,15 @@
 Name:           bash-completion
-Version:        20050721
-Release:        4%{?dist}
+Version:        20060301
+Release:        1%{?dist}
 Summary:        Programmable completion for Bash
 
 Group:          System Environment/Shells
 License:        GPL
 URL:            http://www.caliban.org/bash/
 Source0:        http://www.caliban.org/files/bash/%{name}-%{version}.tar.bz2
-Source1:        %{name}.profile
 Source2:        %{name}-mock
 Source3:        %{name}-repomanage
 Source4:        %{name}-plague-client
-Patch0:         %{name}-20050721-cvs-stat.patch
-Patch1:         %{name}-20050721-bash31quoting.patch
-Patch2:         %{name}-20050721-mtr.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -26,9 +22,7 @@ of the programmable completion feature of bash 2.
 
 %prep
 %setup -q -n bash_completion
-%patch0
-%patch1 -p1
-%patch2
+f=Changelog ; iconv -f iso-8859-1 -t utf-8 $f > $f.utf8 ; mv $f.utf8 $f
 install -pm 644 %{SOURCE2} contrib/mock
 install -pm 644 %{SOURCE3} contrib/plague-client
 install -pm 644 %{SOURCE3} contrib/repomanage
@@ -41,8 +35,7 @@ install -pm 644 %{SOURCE3} contrib/repomanage
 rm -rf $RPM_BUILD_ROOT %{name}-ghosts.list
 install -dm 755 $RPM_BUILD_ROOT%{_sysconfdir}/profile.d
 install -pm 644 bash_completion $RPM_BUILD_ROOT%{_sysconfdir}
-install -pm 644 %{SOURCE1} \
-  $RPM_BUILD_ROOT%{_sysconfdir}/profile.d/bash_completion.sh
+install -pm 644 bash_completion.sh $RPM_BUILD_ROOT%{_sysconfdir}/profile.d
 install -dm 755 $RPM_BUILD_ROOT%{_datadir}/%{name}
 install -pm 644 contrib/* $RPM_BUILD_ROOT%{_datadir}/%{name}
 install -dm 755 $RPM_BUILD_ROOT%{_sysconfdir}/bash_completion.d
@@ -81,7 +74,6 @@ fi\
 %bashcomp_trigger ruby-ri ri
 %bashcomp_trigger sbcl
 %bashcomp_trigger snownews
-%bashcomp_trigger subversion
 %bashcomp_trigger unace
 %bashcomp_trigger unixODBC isql
 %bashcomp_trigger unrar
@@ -98,6 +90,10 @@ fi\
 
 
 %changelog
+* Thu Mar  2 2006 Ville Skyttä <ville.skytta at iki.fi> - 20060301-1
+- 20060301, patches and profile.d scriptlet applied/included upstream.
+- Convert docs to UTF-8.
+
 * Wed Feb  8 2006 Ville Skyttä <ville.skytta at iki.fi> - 20050721-4
 - Don't source ourselves in non-interactive shells (#180419, Behdad Esfahbod).
 - Trigger-install snippets for clisp, gnatmake, isql, ri, sbcl, and snownews.
