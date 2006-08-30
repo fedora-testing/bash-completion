@@ -2,19 +2,28 @@
 
 _mock()
 {
-    local cur prev
+    local cur prev commands cfgdir
 
     COMPREPLY=()
     cur=${COMP_WORDS[COMP_CWORD]}
     prev=${COMP_WORDS[COMP_CWORD-1]}
+    commands='rebuild chroot init clean shell'
+    cfgdir=/etc/mock
+
+    count=0
+    for i in ${COMP_WORDS[@]} ; do
+        [ $count -eq $COMP_CWORD ] && break
+        [ "$i" == --configdir ] && cfgdir="${COMP_WORDS[((count+1))]}"
+        count=$((++count))
+    done
 
     case $prev in
-        --@(result|state)dir)
+        --@(config|result|state)dir)
             _filedir -d
             return 0
             ;;
         -r)
-            COMPREPLY=( $( command ls /etc/mock | \
+            COMPREPLY=( $( command ls $cfgdir | \
                 sed -ne 's/^\('$cur'.*\)\.cfg$/\1/p') )
             return 0
             ;;
@@ -23,9 +32,11 @@ _mock()
             ;;
     esac
 
+    # TODO: process $commands
     if [[ "$cur" == -* ]] ; then
         COMPREPLY=( $( compgen -W '--version -h --help -r --no-clean --arch \
-            --debug --resultdir --statedir --uniqueext' -- $cur ) )
+            --debug --resultdir --statedir --uniqueext --configdir --quiet \
+            --autocache --rebuildcache' -- $cur ) )
     else
         _filedir '?(no)src.rpm'
     fi

@@ -1,6 +1,6 @@
 Name:           bash-completion
 Version:        20060301
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Programmable completion for Bash
 
 Group:          System Environment/Shells
@@ -60,16 +60,22 @@ fi\
 [ $2 -gt 0 ] || rm -f %{_sysconfdir}/bash_completion.d/%{?2}%{!?2:%1}\
 %{nil}
 
+# Not handled (yet?):
+# bitkeeper, dsniff, harbour, larch, lisp, p4, povray, sitecopy
 %bashcomp_trigger bittorrent
 %bashcomp_trigger cksfv
 %bashcomp_trigger clisp
 %bashcomp_trigger freeciv
 %bashcomp_trigger gcc-gnat gnatmake
+%bashcomp_trigger gcl
 %bashcomp_trigger gkrellm
+%bashcomp_trigger lilypond
 %bashcomp_trigger mailman
 %bashcomp_trigger mcrypt
+%bashcomp_trigger mercurial hg
 %bashcomp_trigger mock
 %bashcomp_trigger mtx
+%bashcomp_trigger perl-SVK svk
 %bashcomp_trigger plague-client
 %bashcomp_trigger ruby-ri ri
 %bashcomp_trigger sbcl
@@ -90,6 +96,10 @@ fi\
 
 
 %changelog
+* Thu Aug 31 2006 Ville Skyttä <ville.skytta at iki.fi> - 20060301-2
+- Trigger-install support for gcl, lilypond, mercurial and svk.
+- Improve mock completion a bit.
+
 * Thu Mar  2 2006 Ville Skyttä <ville.skytta at iki.fi> - 20060301-1
 - 20060301, patches and profile.d scriptlet applied/included upstream.
 - Convert docs to UTF-8.
