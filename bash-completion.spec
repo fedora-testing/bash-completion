@@ -1,6 +1,6 @@
 Name:           bash-completion
 Version:        20060301
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Programmable completion for Bash
 
 Group:          System Environment/Shells
@@ -10,6 +10,8 @@ Source0:        http://www.caliban.org/files/bash/%{name}-%{version}.tar.bz2
 Source2:        %{name}-mock
 Source3:        %{name}-repomanage
 Source4:        %{name}-plague-client
+Patch0:         %{name}-20060301-scp-apos-217178.patch
+Patch1:         %{name}-20060301-debian.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -22,6 +24,8 @@ of the programmable completion feature of bash 2.
 
 %prep
 %setup -q -n bash_completion
+%patch0
+%patch1
 f=Changelog ; iconv -f iso-8859-1 -t utf-8 $f > $f.utf8 ; mv $f.utf8 $f
 install -pm 644 %{SOURCE2} contrib/mock
 install -pm 644 %{SOURCE3} contrib/plague-client
@@ -96,6 +100,10 @@ fi\
 
 
 %changelog
+* Wed Feb 28 2007 Ville Skyttä <ville.skytta at iki.fi> - 20060301-3
+- Fix scp with single quotes (#217178).
+- Borrow fix for bzip2 w/spaces, and apropos and whatis support from Debian.
+
 * Thu Aug 31 2006 Ville Skyttä <ville.skytta at iki.fi> - 20060301-2
 - Trigger-install support for gcl, lilypond, mercurial and svk.
 - Improve mock completion a bit.
