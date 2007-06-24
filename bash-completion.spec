@@ -1,6 +1,6 @@
 Name:           bash-completion
 Version:        20060301
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Programmable completion for Bash
 
 Group:          System Environment/Shells
@@ -55,39 +55,121 @@ cd -
 rm -rf $RPM_BUILD_ROOT
 
 
-%define bashcomp_trigger() \
-%triggerin -- %1\
-if [ ! -e %{_sysconfdir}/bash_completion.d/%{?2}%{!?2:%1} ] ; then\
-  ln -s %{_datadir}/%{name}/%{?2}%{!?2:%1} %{_sysconfdir}/bash_completion.d\
-fi\
-%triggerun -- %1\
-[ $2 -gt 0 ] || rm -f %{_sysconfdir}/bash_completion.d/%{?2}%{!?2:%1}\
-%{nil}
+%define do_triggerin() if [ ! -e %{_sysconfdir}/bash_completion.d/%1 ] ; then ln -s %{_datadir}/%{name}/%1 %{_sysconfdir}/bash_completion.d || : ; fi
+%define do_triggerun() [ $2 -gt 0 ] || rm -f %{_sysconfdir}/bash_completion.d/%1 || :
 
 # Not handled (yet?):
 # bitkeeper, dsniff, harbour, larch, lisp, p4, povray, sitecopy
-%bashcomp_trigger bittorrent
-%bashcomp_trigger cksfv
-%bashcomp_trigger clisp
-%bashcomp_trigger freeciv
-%bashcomp_trigger gcc-gnat gnatmake
-%bashcomp_trigger gcl
-%bashcomp_trigger gkrellm
-%bashcomp_trigger lilypond
-%bashcomp_trigger mailman
-%bashcomp_trigger mcrypt
-%bashcomp_trigger mercurial hg
-%bashcomp_trigger mock
-%bashcomp_trigger mtx
-%bashcomp_trigger perl-SVK svk
-%bashcomp_trigger plague-client
-%bashcomp_trigger ruby-ri ri
-%bashcomp_trigger sbcl
-%bashcomp_trigger snownews
-%bashcomp_trigger unace
-%bashcomp_trigger unixODBC isql
-%bashcomp_trigger unrar
-%bashcomp_trigger yum-utils repomanage
+
+%triggerin -- bittorrent
+%do_triggerin bittorrent
+%triggerun -- bittorrent
+%do_triggerun bittorrent
+
+%triggerin -- cksfv
+%do_triggerin cksfv
+%triggerun -- cksfv
+%do_triggerun cksfv
+
+%triggerin -- clisp
+%do_triggerin clisp
+%triggerun -- clisp
+%do_triggerun clisp
+
+%triggerin -- freeciv
+%do_triggerin freeciv
+%triggerun -- freeciv
+%do_triggerun freeciv
+
+%triggerin -- gcc-gnat
+%do_triggerin gnatmake
+%triggerun -- gcc-gnat
+%do_triggerun gnatmake
+
+%triggerin -- gcl
+%do_triggerin gcl
+%triggerun -- gcl
+%do_triggerun gcl
+
+%triggerin -- gkrellm
+%do_triggerin gkrellm
+%triggerun -- gkrellm
+%do_triggerun gkrellm
+
+%triggerin -- lilypond
+%do_triggerin lilypond
+%triggerun -- lilypond
+%do_triggerun lilypond
+
+%triggerin -- mailman
+%do_triggerin mailman
+%triggerun -- mailman
+%do_triggerun mailman
+
+%triggerin -- mcrypt
+%do_triggerin mcrypt
+%triggerun -- mcrypt
+%do_triggerun mcrypt
+
+%triggerin -- mercurial
+%do_triggerin hg
+%triggerun -- mercurial
+%do_triggerun hg
+
+%triggerin -- mock
+%do_triggerin mock
+%triggerun -- mock
+%do_triggerun mock
+
+%triggerin -- mtx
+%do_triggerin mtx
+%triggerun -- mtx
+%do_triggerun mtx
+
+%triggerin -- perl-SVK
+%do_triggerin svk
+%triggerun -- perl-SVK
+%do_triggerun svk
+
+%triggerin -- plague-client
+%do_triggerin plague-client
+%triggerun -- plague-client
+%do_triggerun plague-client
+
+%triggerin -- ruby-ri
+%do_triggerin ri
+%triggerun -- ruby-ri
+%do_triggerun ri
+
+%triggerin -- sbcl
+%do_triggerin sbcl
+%triggerun -- sbcl
+%do_triggerun sbcl
+
+%triggerin -- snownews
+%do_triggerin snownews
+%triggerun -- snownews
+%do_triggerun snownews
+
+%triggerin -- unace
+%do_triggerin unace
+%triggerun -- unace
+%do_triggerun unace
+
+%triggerin -- unixODBC
+%do_triggerin isql
+%triggerun -- unixODBC
+%do_triggerun isql
+
+%triggerin -- unrar
+%do_triggerin unrar
+%triggerun -- unrar
+%do_triggerun unrar
+
+%triggerin -- yum-utils
+%do_triggerin repomanage
+%triggerun -- yum-utils
+%do_triggerun repomanage
 
 
 %files -f %{name}-ghosts.list
@@ -100,6 +182,9 @@ fi\
 
 
 %changelog
+* Sun Jun 24 2007 Jeff Sheltren <sheltren@cs.ucsb.edu> - 20060301-4
+- Update triggers to work with older versions of RPM
+
 * Wed Feb 28 2007 Ville Skyttä <ville.skytta at iki.fi> - 20060301-3
 - Fix scp with single quotes (#217178).
 - Borrow fix for bzip2 w/spaces, and apropos and whatis support from Debian.
