@@ -1,10 +1,10 @@
 Name:           bash-completion
 Version:        20060301
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Programmable completion for Bash
 
 Group:          System Environment/Shells
-License:        GPL
+License:        GPLv2+
 URL:            http://www.caliban.org/bash/
 Source0:        http://www.caliban.org/files/bash/%{name}-%{version}.tar.bz2
 Source2:        %{name}-mock
@@ -182,6 +182,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Aug 13 2007 Ville Skyttä <ville.skytta at iki.fi> - 20060301-5
+- License: GPLv2+
+
 * Sun Jun 24 2007 Jeff Sheltren <sheltren@cs.ucsb.edu> - 20060301-4
 - Update triggers to work with older versions of RPM
 
