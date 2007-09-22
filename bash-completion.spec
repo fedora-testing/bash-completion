@@ -1,6 +1,6 @@
 Name:           bash-completion
 Version:        20060301
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Programmable completion for Bash
 
 Group:          System Environment/Shells
@@ -12,6 +12,7 @@ Source3:        %{name}-repomanage
 Source4:        %{name}-plague-client
 Patch0:         %{name}-20060301-scp-apos-217178.patch
 Patch1:         %{name}-20060301-debian.patch
+Patch2:         %{name}-20060301-perl-299571.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -26,6 +27,7 @@ of the programmable completion feature of bash 2.
 %setup -q -n bash_completion
 %patch0
 %patch1
+%patch2
 f=Changelog ; iconv -f iso-8859-1 -t utf-8 $f > $f.utf8 ; mv $f.utf8 $f
 install -pm 644 %{SOURCE2} contrib/mock
 install -pm 644 %{SOURCE3} contrib/plague-client
@@ -182,6 +184,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Sep 22 2007 Ville Skyttä <ville.skytta at iki.fi> - 20060301-6
+- Patch to improve perl completion (#299571, Jim Radford,
+  http://use.perl.org/~Alias/journal/33508).
+
 * Mon Aug 13 2007 Ville Skyttä <ville.skytta at iki.fi> - 20060301-5
 - License: GPLv2+
 
