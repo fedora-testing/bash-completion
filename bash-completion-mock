@@ -2,41 +2,62 @@
 
 _mock()
 {
-    local cur prev commands cfgdir
+    local cur prev commands plugins cfgdir
 
     COMPREPLY=()
     cur=${COMP_WORDS[COMP_CWORD]}
     prev=${COMP_WORDS[COMP_CWORD-1]}
-    commands='rebuild chroot init clean shell'
+    commands='rebuild chroot init clean shell installdeps install'
+    plugins='ccache yum_cache root_cache bind_mount'
     cfgdir=/etc/mock
 
     count=0
     for i in ${COMP_WORDS[@]} ; do
         [ $count -eq $COMP_CWORD ] && break
-        [ "$i" == --configdir ] && cfgdir="${COMP_WORDS[((count+1))]}"
+        if [[ "$i" == --configdir ]] ; then
+            cfgdir="${COMP_WORDS[((count+1))]}"
+        elif [[ "$i" == --configdir=* ]] ; then
+            cfgdir=${i/*=/}
+        fi
         count=$((++count))
     done
 
     case $prev in
-        --@(config|result|state)dir)
-            _filedir -d
-            return 0
-            ;;
         -r)
             COMPREPLY=( $( command ls $cfgdir | \
                 sed -ne 's/^\('$cur'.*\)\.cfg$/\1/p') )
             return 0
             ;;
-        -@(-arch|-uniqueext|-help|h))
+        -@(-help|h))
             return 0
             ;;
     esac
 
+    # --name=value style option
+    if [[ "$cur" == *=* ]] ; then
+        prev=${cur/=*/}
+        cur=${cur/*=/}
+        case $prev in 
+            --@(config|result)dir)
+                _filedir -d
+                return 0
+                ;;
+            --@(en|dis)able-plugin)
+                COMPREPLY=( $( compgen -W "$plugins" -- $cur ) )
+                return 0
+                ;;
+            -@(-arch|-uniqueext|-rpmbuild_timeout))
+                return 0
+                ;;
+        esac
+    fi
+
     # TODO: process $commands
     if [[ "$cur" == -* ]] ; then
-        COMPREPLY=( $( compgen -W '--version -h --help -r --no-clean --arch \
-            --debug --resultdir --statedir --uniqueext --configdir --quiet \
-            --autocache --rebuildcache' -- $cur ) )
+        COMPREPLY=( $( compgen -W '--version -h --help -r --no-clean \
+            --cleanup-after --no-cleanup-after --arch= --resultdir= \
+            --uniqueext= --configdir= --rpmbuild_timeout= --enable-plugin= \
+            --disable-plugin=' -- $cur ) )
     else
         _filedir '?(no)src.rpm'
     fi

@@ -188,6 +188,7 @@ rm -rf $RPM_BUILD_ROOT
 %changelog
 * Fri Nov 16 2007 Ville Skyttä <ville.skytta at iki.fi> - 20060301-7
 - Add JPEG2000 extensions for display(1) (#304771).
+- Update mock completion.
 
 * Sat Sep 22 2007 Ville Skyttä <ville.skytta at iki.fi> - 20060301-6
 - Patch to improve perl completion (#299571, Jim Radford,
