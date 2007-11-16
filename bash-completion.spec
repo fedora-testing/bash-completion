@@ -1,6 +1,6 @@
 Name:           bash-completion
 Version:        20060301
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Programmable completion for Bash
 
 Group:          System Environment/Shells
@@ -13,6 +13,7 @@ Source4:        %{name}-plague-client
 Patch0:         %{name}-20060301-scp-apos-217178.patch
 Patch1:         %{name}-20060301-debian.patch
 Patch2:         %{name}-20060301-perl-299571.patch
+Patch3:         %{name}-20060301-jpeg2000-304771.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -28,6 +29,7 @@ of the programmable completion feature of bash 2.
 %patch0
 %patch1
 %patch2
+%patch3
 f=Changelog ; iconv -f iso-8859-1 -t utf-8 $f > $f.utf8 ; mv $f.utf8 $f
 install -pm 644 %{SOURCE2} contrib/mock
 install -pm 644 %{SOURCE3} contrib/plague-client
@@ -184,6 +186,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Nov 16 2007 Ville Skyttä <ville.skytta at iki.fi> - 20060301-7
+- Add JPEG2000 extensions for display(1) (#304771).
+
 * Sat Sep 22 2007 Ville Skyttä <ville.skytta at iki.fi> - 20060301-6
 - Patch to improve perl completion (#299571, Jim Radford,
   http://use.perl.org/~Alias/journal/33508).

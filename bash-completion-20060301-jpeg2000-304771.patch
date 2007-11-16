@@ -1,0 +1,5 @@
+--- bash_completion~	2006-03-01 18:20:18.000000000 +0200
++++ bash_completion	2007-11-16 23:23:20.000000000 +0200
+@@ -86 +86 @@
+-complete -f -X '!*.@(gif|jp?(e)g|miff|tif?(f)|pn[gm]|p[bgp]m|bmp|xpm|ico|xwd|tga|pcx|GIF|JP?(E)G|MIFF|TIF?(F)|PN[GM]|P[BGP]M|BMP|XPM|ICO|XWD|TGA|PCX)' ee display
++complete -f -X '!*.@(gif|jp?(e)g|jp[2cfx]|j2k|miff|tif?(f)|pn[gm]|p[bgp]m|bmp|xpm|ico|xwd|tga|pcx|GIF|JP?(E)G|JP[2CFX]|J2K|MIFF|TIF?(F)|PN[GM]|P[BGP]M|BMP|XPM|ICO|XWD|TGA|PCX)' ee display
