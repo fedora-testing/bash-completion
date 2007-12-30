@@ -1,13 +1,14 @@
 # bash completion for mock                                           -*- sh -*-
 
+# TODO: --copyin, --copyout
+
 _mock()
 {
-    local cur prev commands plugins cfgdir
+    local cur prev plugins cfgdir
 
     COMPREPLY=()
     cur=${COMP_WORDS[COMP_CWORD]}
     prev=${COMP_WORDS[COMP_CWORD-1]}
-    commands='rebuild chroot init clean shell installdeps install'
     plugins='ccache yum_cache root_cache bind_mount'
     cfgdir=/etc/mock
 
@@ -46,18 +47,20 @@ _mock()
                 COMPREPLY=( $( compgen -W "$plugins" -- $cur ) )
                 return 0
                 ;;
-            -@(-arch|-uniqueext|-rpmbuild_timeout))
+            --@(arch|define|with|without|uniqueext|rpmbuild_timeout))
                 return 0
                 ;;
         esac
     fi
 
-    # TODO: process $commands
     if [[ "$cur" == -* ]] ; then
-        COMPREPLY=( $( compgen -W '--version -h --help -r --no-clean \
-            --cleanup-after --no-cleanup-after --arch= --resultdir= \
-            --uniqueext= --configdir= --rpmbuild_timeout= --enable-plugin= \
-            --disable-plugin=' -- $cur ) )
+        COMPREPLY=( $( compgen -W '--version -h --help --rebuild --chroot \
+            --shell --clean --init --installdeps --install --update \
+            --orphanskill -r --offline --no-clean --cleanup-after \
+            --no-cleanup-after --arch= --define= --with= --without= \
+            --resultdir= --uniqueext= --configdir= --rpmbuild_timeout -v \
+            --verbose -q --quiet --trace --enable-plugin= --disable-plugin=' \
+            -- $cur ) )
     else
         _filedir '?(no)src.rpm'
     fi
