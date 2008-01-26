@@ -1,6 +1,6 @@
 Name:           bash-completion
 Version:        20060301
-Release:        8%{?dist}
+Release:        9
 Summary:        Programmable completion for Bash
 
 Group:          System Environment/Shells
@@ -15,6 +15,7 @@ Patch1:         %{name}-20060301-debian.patch
 Patch2:         %{name}-20060301-perl-299571.patch
 Patch3:         %{name}-20060301-jpeg2000-304771.patch
 Patch4:         %{name}-20060301-vdrfiles.patch
+Patch5:         %{name}-20060301-svn-filenames-430059.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -32,6 +33,7 @@ of the programmable completion feature of bash 2.
 %patch2
 %patch3
 %patch4
+%patch5
 f=Changelog ; iconv -f iso-8859-1 -t utf-8 $f > $f.utf8 ; mv $f.utf8 $f
 install -pm 644 %{SOURCE2} contrib/mock
 install -pm 644 %{SOURCE3} contrib/plague-client
@@ -65,7 +67,7 @@ rm -rf $RPM_BUILD_ROOT
 %define do_triggerun() [ $2 -gt 0 ] || rm -f %{_sysconfdir}/bash_completion.d/%1 || :
 
 # Not handled (yet?):
-# bitkeeper, dsniff, harbour, larch, lisp, p4, povray, sitecopy
+# bitkeeper, harbour, larch, lisp, p4, povray, sitecopy
 
 %triggerin -- bittorrent
 %do_triggerin bittorrent
@@ -81,6 +83,11 @@ rm -rf $RPM_BUILD_ROOT
 %do_triggerin clisp
 %triggerun -- clisp
 %do_triggerun clisp
+
+%triggerin -- dsniff
+%do_triggerin dsniff
+%triggerun -- dsniff
+%do_triggerun dsniff
 
 %triggerin -- freeciv
 %do_triggerin freeciv
@@ -188,6 +195,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Jan 25 2008 Ville Skyttä <ville.skytta at iki.fi> - 20060301-9
+- Patch to fix filename completion with svn (#430059).
+- Trigger-install support for dsniff.
+- Drop disttag.
+
 * Mon Dec 31 2007 Ville Skyttä <ville.skytta at iki.fi> - 20060301-8
 - Associate VDR recording files with media players.
 - Update mock completion.

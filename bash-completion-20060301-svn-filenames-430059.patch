@@ -1,0 +1,12 @@
+diff -up bash_completion~ bash_completion
+--- bash_completion~	2006-03-01 18:20:18.000000000 +0200
++++ bash_completion	2008-01-24 20:21:12.000000000 +0200
+@@ -9083,7 +9083,7 @@ _svn()
+ 
+ 	return 0
+ }
+-complete -F _svn $default svn
++complete -F _svn $filenames svn
+ 
+ _svnadmin()
+ {
