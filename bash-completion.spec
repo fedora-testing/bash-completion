@@ -1,6 +1,6 @@
 Name:           bash-completion
 Version:        20060301
-Release:        9
+Release:        10
 Summary:        Programmable completion for Bash
 
 Group:          System Environment/Shells
@@ -195,7 +195,7 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Fri Jan 25 2008 Ville Skyttä <ville.skytta at iki.fi> - 20060301-9
+* Sat Feb 23 2008 Ville Skyttä <ville.skytta at iki.fi> - 20060301-10
 - Patch to fix filename completion with svn (#430059).
 - Trigger-install support for dsniff.
 - Drop disttag.
