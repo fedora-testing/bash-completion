@@ -1,6 +1,6 @@
 Name:           bash-completion
 Version:        20060301
-Release:        10
+Release:        11
 Summary:        Programmable completion for Bash
 
 Group:          System Environment/Shells
@@ -14,7 +14,7 @@ Patch0:         %{name}-20060301-scp-apos-217178.patch
 Patch1:         %{name}-20060301-debian.patch
 Patch2:         %{name}-20060301-perl-299571.patch
 Patch3:         %{name}-20060301-jpeg2000-304771.patch
-Patch4:         %{name}-20060301-vdrfiles.patch
+Patch4:         %{name}-20060301-mediafiles-444467.patch
 Patch5:         %{name}-20060301-svn-filenames-430059.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -195,6 +195,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Apr 29 2008 Ville Skyttä <ville.skytta at iki.fi> - 20060301-11
+- Media player association improvements (#444467).
+
 * Sat Feb 23 2008 Ville Skyttä <ville.skytta at iki.fi> - 20060301-10
 - Patch to fix filename completion with svn (#430059).
 - Trigger-install support for dsniff.
