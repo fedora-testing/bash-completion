@@ -1,6 +1,6 @@
 Name:           bash-completion
 Version:        20060301
-Release:        11
+Release:        12
 Summary:        Programmable completion for Bash
 
 Group:          System Environment/Shells
@@ -36,8 +36,8 @@ of the programmable completion feature of bash 2.
 %patch5
 f=Changelog ; iconv -f iso-8859-1 -t utf-8 $f > $f.utf8 ; mv $f.utf8 $f
 install -pm 644 %{SOURCE2} contrib/mock
-install -pm 644 %{SOURCE3} contrib/plague-client
 install -pm 644 %{SOURCE3} contrib/repomanage
+install -pm 644 %{SOURCE4} contrib/plague-client
 
 
 %build
@@ -67,7 +67,7 @@ rm -rf $RPM_BUILD_ROOT
 %define do_triggerun() [ $2 -gt 0 ] || rm -f %{_sysconfdir}/bash_completion.d/%1 || :
 
 # Not handled (yet?):
-# bitkeeper, harbour, larch, lisp, p4, povray, sitecopy
+# bitkeeper, harbour, larch, lisp, p4, povray
 
 %triggerin -- bittorrent
 %do_triggerin bittorrent
@@ -159,6 +159,11 @@ rm -rf $RPM_BUILD_ROOT
 %triggerun -- sbcl
 %do_triggerun sbcl
 
+%triggerin -- sitecopy
+%do_triggerin sitecopy
+%triggerun -- sitecopy
+%do_triggerun sitecopy
+
 %triggerin -- snownews
 %do_triggerin snownews
 %triggerun -- snownews
@@ -195,6 +200,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Jul 23 2008 Ville Skyttä <ville.skytta at iki.fi> - 20060301-12
+- Fix plague-client completion install (#456355, Ricky Zhou).
+- Trigger-install support for sitecopy.
+
 * Tue Apr 29 2008 Ville Skyttä <ville.skytta at iki.fi> - 20060301-11
 - Media player association improvements (#444467).
 
