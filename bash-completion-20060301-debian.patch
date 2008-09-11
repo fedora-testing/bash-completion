@@ -9,12 +9,3 @@
  
  # renice(8) completion
  #
-@@ -3325,7 +3323,7 @@
- have bzip2 &&
- _bzip2()
- {
--	local cur prev xspec
-+	local cur prev xspec IFS=$'\t\n'
- 
- 	COMPREPLY=()
- 	cur=${COMP_WORDS[COMP_CWORD]}

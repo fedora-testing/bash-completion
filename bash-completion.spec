@@ -1,12 +1,13 @@
 Name:           bash-completion
 Version:        20060301
-Release:        12
+Release:        13
 Summary:        Programmable completion for Bash
 
 Group:          System Environment/Shells
 License:        GPLv2+
 URL:            http://www.caliban.org/bash/
 Source0:        http://www.caliban.org/files/bash/%{name}-%{version}.tar.bz2
+Source1:        %{name}-lzop
 Source2:        %{name}-mock
 Source3:        %{name}-repomanage
 Source4:        %{name}-plague-client
@@ -16,6 +17,12 @@ Patch2:         %{name}-20060301-perl-299571.patch
 Patch3:         %{name}-20060301-jpeg2000-304771.patch
 Patch4:         %{name}-20060301-mediafiles-444467.patch
 Patch5:         %{name}-20060301-svn-filenames-430059.patch
+Patch6:         %{name}-20060301-gzip.patch
+Patch7:         %{name}-20060301-lzma.patch
+Patch8:         %{name}-20060301-rpm-backups.patch
+Patch9:         %{name}-20060301-rpm-eval.patch
+Patch10:        %{name}-20060301-getent.patch
+Patch11:        %{name}-20060301-sqlite.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -34,7 +41,14 @@ of the programmable completion feature of bash 2.
 %patch3
 %patch4
 %patch5
+%patch6 -p1
+%patch7 -p1
+%patch8 -p1
+%patch9 -p1
+%patch10 -p1
+%patch11 -p1
 f=Changelog ; iconv -f iso-8859-1 -t utf-8 $f > $f.utf8 ; mv $f.utf8 $f
+install -pm 644 %{SOURCE1} contrib/lzop
 install -pm 644 %{SOURCE2} contrib/mock
 install -pm 644 %{SOURCE3} contrib/repomanage
 install -pm 644 %{SOURCE4} contrib/plague-client
@@ -113,6 +127,11 @@ rm -rf $RPM_BUILD_ROOT
 %do_triggerin lilypond
 %triggerun -- lilypond
 %do_triggerun lilypond
+
+%triggerin -- lzop
+%do_triggerin lzop
+%triggerun -- lzop
+%do_triggerun lzop
 
 %triggerin -- mailman
 %do_triggerin mailman
@@ -200,6 +219,14 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Sep 11 2008 Ville Skyttä <ville.skytta at iki.fi> - 20060301-13
+- Borrow/improve/adapt to Fedora some patches from Mandriva: improved support
+  for getent and rpm --eval, better rpm backup file avoidance, lzma support.
+- Patch/unpatch to fix gzip and bzip2 options completion.
+- Patch to add --rsyncable to gzip options completion.
+- Add and trigger-install support for lzop.
+- Associate *.sqlite with sqlite3.
+
 * Wed Jul 23 2008 Ville Skyttä <ville.skytta at iki.fi> - 20060301-12
 - Fix plague-client completion install (#456355, Ricky Zhou).
 - Trigger-install support for sitecopy.

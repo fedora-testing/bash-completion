@@ -1,0 +1,11 @@
+diff -up bash_completion/bash_completion~ bash_completion/bash_completion
+--- bash_completion/bash_completion~	2006-03-01 18:20:18.000000000 +0200
++++ bash_completion/bash_completion	2008-09-07 13:33:40.000000000 +0300
+@@ -115,6 +115,7 @@ complete -f -X '!*.@(sxd|std|sda|sdd|odg
+ complete -f -X '!*.@(sxm|smf|mml|odf)' oomath
+ complete -f -X '!*.odb' oobase
+ complete -f -X '!*.rpm' rpm2cpio
++complete -f -X '!*.sqlite' sqlite3
+ # FINISH exclude -- do not remove this line
+ 
+ # start of section containing compspecs that can be handled within bash
