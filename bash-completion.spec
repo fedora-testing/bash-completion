@@ -219,6 +219,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Sep 25 2008 Ville Skyttä <ville.skytta at iki.fi>
+- More Matroska associations (#463829, based on patch from Yanko Kaneti).
+
 * Thu Sep 11 2008 Ville Skyttä <ville.skytta at iki.fi> - 20060301-13
 - Borrow/improve/adapt to Fedora some patches from Mandriva: improved support
   for getent and rpm --eval, better rpm backup file avoidance, lzma support.
