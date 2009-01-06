@@ -1,27 +1,27 @@
 Name:           bash-completion
-Version:        20060301
-Release:        13
+Version:        20080705
+Release:        1
 Summary:        Programmable completion for Bash
 
 Group:          System Environment/Shells
 License:        GPLv2+
-URL:            http://www.caliban.org/bash/
-Source0:        http://www.caliban.org/files/bash/%{name}-%{version}.tar.bz2
+URL:            http://bash-completion.alioth.debian.org/
+Source0:        http://ftp.debian.org/debian/pool/main/b/bash-completion/%{name}_%{version}.tar.gz
 Source1:        %{name}-lzop
 Source2:        %{name}-mock
 Source3:        %{name}-repomanage
 Source4:        %{name}-plague-client
-Patch0:         %{name}-20060301-scp-apos-217178.patch
-Patch1:         %{name}-20060301-debian.patch
-Patch2:         %{name}-20060301-perl-299571.patch
-Patch3:         %{name}-20060301-jpeg2000-304771.patch
-Patch4:         %{name}-20060301-mediafiles-444467.patch
-Patch5:         %{name}-20060301-svn-filenames-430059.patch
-Patch6:         %{name}-20060301-gzip.patch
-Patch7:         %{name}-20060301-lzma.patch
-Patch8:         %{name}-20060301-rpm-backups.patch
+Patch0:         %{name}-20080705-rpm-installed.patch
+Patch1:         %{name}-20060301-yum-available-speedup-478784.patch
+Patch2:         %{name}-20060301-man.patch
+Patch3:         %{name}-20080705-jpeg2000-304771.patch
+Patch4:         %{name}-20080705-mediafiles-444467.patch
+Patch5:         %{name}-20080705-svn-filenames-430059.patch
+Patch6:         %{name}-20080705-gzip.patch
+Patch7:         %{name}-20080705-lzma.patch
+Patch8:         %{name}-20080705-rpm-backups.patch
 Patch9:         %{name}-20060301-rpm-eval.patch
-Patch10:        %{name}-20060301-getent.patch
+Patch10:        %{name}-20080705-getent.patch
 Patch11:        %{name}-20060301-sqlite.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -34,20 +34,19 @@ of the programmable completion feature of bash 2.
 
 
 %prep
-%setup -q -n bash_completion
+%setup -q -n %{name}
 %patch0
 %patch1
 %patch2
 %patch3
 %patch4
 %patch5
-%patch6 -p1
-%patch7 -p1
-%patch8 -p1
+%patch6
+%patch7
+%patch8
 %patch9 -p1
-%patch10 -p1
+%patch10
 %patch11 -p1
-f=Changelog ; iconv -f iso-8859-1 -t utf-8 $f > $f.utf8 ; mv $f.utf8 $f
 install -pm 644 %{SOURCE1} contrib/lzop
 install -pm 644 %{SOURCE2} contrib/mock
 install -pm 644 %{SOURCE3} contrib/repomanage
@@ -211,7 +210,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -f %{name}-ghosts.list
 %defattr(-,root,root,-)
-%doc BUGS Changelog COPYING README
+%doc README TODO debian/changelog debian/copyright
 %config(noreplace) %{_sysconfdir}/profile.d/bash_completion.sh
 %{_sysconfdir}/bash_completion
 %dir %{_sysconfdir}/bash_completion.d/
@@ -219,6 +218,14 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Jan  6 2009 Ville Skyttä <ville.skytta at iki.fi> - 20080705-1
+- 20080705; new upstream at http://bash-completion.alioth.debian.org/
+- Perl, Debian, and scp patches applied upstream.
+- Patch to improve man completion: more sections, better filename handling.
+- Patch to speed up yum install/deplist completion (#478784).
+- Patch to fix and speed up rpm installed packages completion.
+- Update mock completion.
+
 * Thu Sep 25 2008 Ville Skyttä <ville.skytta at iki.fi>
 - More Matroska associations (#463829, based on patch from Yanko Kaneti).
 

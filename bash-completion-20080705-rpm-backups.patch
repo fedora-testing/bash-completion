@@ -1,7 +1,6 @@
-diff -up bash_completion/bash_completion~ bash_completion/bash_completion
---- bash_completion/bash_completion~	2006-03-01 18:20:18.000000000 +0200
-+++ bash_completion/bash_completion	2008-09-07 12:12:11.000000000 +0300
-@@ -348,10 +348,10 @@ _services()
+--- bash_completion~	2009-01-06 19:12:03.000000000 +0200
++++ bash_completion	2009-01-06 19:23:35.000000000 +0200
+@@ -424,10 +424,10 @@
  	local sysvdir famdir
  	[ -d /etc/rc.d/init.d ] && sysvdir=/etc/rc.d/init.d || sysvdir=/etc/init.d
  	famdir=/etc/xinetd.d
@@ -9,12 +8,12 @@ diff -up bash_completion/bash_completion~ bash_completion/bash_completion
 +	COMPREPLY=( $( builtin echo $sysvdir/!(*.rpmsave|*.rpmorig|*.rpmnew|*~|functions)) )
  
  	if [ -d $famdir ]; then
--		COMPREPLY=( ${COMPREPLY[@]} $( builtin echo $famdir/!(*.rpmsave|*.rpmorig|*~)) )
-+		COMPREPLY=( ${COMPREPLY[@]} $( builtin echo $famdir/!(*.rpmsave|*.rpmorig|*.rpmnew|*~)) )
+-		COMPREPLY=( "${COMPREPLY[@]}" $( builtin echo $famdir/!(*.rpmsave|*.rpmorig|*~)) )
++		COMPREPLY=( "${COMPREPLY[@]}" $( builtin echo $famdir/!(*.rpmsave|*.rpmorig|*.rpmnew|*~)) )
  	fi
  
  	COMPREPLY=( $( compgen -W '${COMPREPLY[@]#@($sysvdir|$famdir)/}' -- $cur ) )
-@@ -8679,7 +8679,7 @@ _update_rc_d()
+@@ -9080,7 +9080,7 @@
      [ -d /etc/rc.d/init.d ] && sysvdir=/etc/rc.d/init.d \
  	|| sysvdir=/etc/init.d
  
@@ -23,7 +22,7 @@ diff -up bash_completion/bash_completion~ bash_completion/bash_completion
      services=( ${services[@]#$sysvdir/} )
      options=( -f -n )
  
-@@ -8745,7 +8745,7 @@ _invoke_rc_d()
+@@ -9146,7 +9146,7 @@
      [ -d /etc/rc.d/init.d ] && sysvdir=/etc/rc.d/init.d \
  	|| sysvdir=/etc/init.d
  
@@ -32,7 +31,7 @@ diff -up bash_completion/bash_completion~ bash_completion/bash_completion
      services=( ${services[@]#$sysvdir/} )
      options=( --help --quiet --force --try-anyway --disclose-deny --query --no-fallback )
  
-@@ -9281,7 +9281,7 @@ unset list
+@@ -9700,7 +9700,7 @@
  if [ -d $BASH_COMPLETION_DIR -a -r $BASH_COMPLETION_DIR -a \
       -x $BASH_COMPLETION_DIR ]; then
  	for i in $BASH_COMPLETION_DIR/*; do

@@ -6,7 +6,7 @@ _lzop()
 	local cur prev xspec IFS=$' \t\n'
 
 	COMPREPLY=()
-	cur=${COMP_WORDS[COMP_CWORD]}
+	cur=`_get_cword`
 	prev=${COMP_WORDS[COMP_CWORD-1]}
 
 	if [[ "$cur" == -* ]]; then

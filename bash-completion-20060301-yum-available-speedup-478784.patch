@@ -1,0 +1,11 @@
+--- bash_completion~	2008-09-11 21:22:40.000000000 +0300
++++ bash_completion	2009-01-05 18:47:08.000000000 +0200
+@@ -6352,7 +6352,7 @@
+ 	if [ -n "$special" ]; then
+ 	    case $special in
+ 		install|deplist)
+-		    COMPREPLY=( $( compgen -W '$( yum -C list | cut -d" " -f1 )' -- $cur ) )
++		    COMPREPLY=( $( compgen -W "$( yum -d 0 -C list available "$cur*" | cut -d' ' -f1 )" -- $cur ) )
+ 		    return 0
+ 		    ;;
+ 		*)

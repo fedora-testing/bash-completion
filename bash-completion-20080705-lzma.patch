@@ -1,7 +1,6 @@
-diff -up bash_completion/bash_completion~ bash_completion/bash_completion
---- bash_completion/bash_completion~	2006-03-01 18:20:18.000000000 +0200
-+++ bash_completion/bash_completion	2008-09-10 19:02:25.000000000 +0300
-@@ -796,7 +796,7 @@ _man()
+--- bash_completion~	2008-07-05 16:55:03.000000000 +0300
++++ bash_completion	2009-01-06 19:12:03.000000000 +0200
+@@ -873,7 +873,7 @@
  	# weed out directory path names and paths to man pages
  	COMPREPLY=( ${COMPREPLY[@]##*/?(:)} )
  	# strip suffix from man pages
@@ -10,7 +9,7 @@ diff -up bash_completion/bash_completion~ bash_completion/bash_completion
  	COMPREPLY=( $( compgen -W '${COMPREPLY[@]%.*}' -- "${cur//\\\\/}" ) )
  
  	[[ "$prev" != [0-9ln] ]] && _filedir '[0-9ln]'
-@@ -1971,7 +1971,7 @@ _rpm()
+@@ -2050,7 +2050,7 @@
  		elif [[ ${COMP_WORDS[1]} == -b* ]]; then
  			_filedir 'spec'
  		else
@@ -19,7 +18,7 @@ diff -up bash_completion/bash_completion~ bash_completion/bash_completion
  		fi
  		;;
  	--re@(build|compile))
-@@ -1983,7 +1983,7 @@ _rpm()
+@@ -2062,7 +2062,7 @@
  		fi
  		;;
  	--tarbuild)
@@ -28,7 +27,7 @@ diff -up bash_completion/bash_completion~ bash_completion/bash_completion
  		;;
  	--@(re|add)sign)
  		_filedir 'rpm'
-@@ -3356,6 +3356,44 @@ _bzip2()
+@@ -3454,6 +3454,44 @@
  } &&
  complete -F _bzip2 $filenames bzip2
  
@@ -40,7 +39,7 @@ diff -up bash_completion/bash_completion~ bash_completion/bash_completion
 +	local cur prev xspec
 +
 +	COMPREPLY=()
-+	cur=${COMP_WORDS[COMP_CWORD]}
++	cur=`_get_cword`
 +	prev=${COMP_WORDS[COMP_CWORD-1]}
 +
 +	if [[ "$cur" == -* ]]; then
@@ -73,9 +72,9 @@ diff -up bash_completion/bash_completion~ bash_completion/bash_completion
  # openssl(1) completion
  #
  have openssl && {
-@@ -6968,7 +7006,7 @@ _info()
+@@ -7331,7 +7369,7 @@
  		fi;
- 	done  
+ 	done
  	# strip suffix from info pages
 -	COMPREPLY=( ${COMPREPLY[@]%.@(gz|bz2)} )
 +	COMPREPLY=( ${COMPREPLY[@]%.@(gz|bz2|lzma)} )

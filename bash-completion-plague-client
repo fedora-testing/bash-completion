@@ -5,7 +5,7 @@ _plague_client()
     local cur
 
     COMPREPLY=()
-    cur=${COMP_WORDS[COMP_CWORD]}
+    cur=`_get_cword`
 
     [ $COMP_CWORD = 1 ] && \
     COMPREPLY=( $( compgen -W 'build detail finish help is_paused kill list \

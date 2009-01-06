@@ -7,13 +7,13 @@ _mock()
     local cur prev plugins cfgdir
 
     COMPREPLY=()
-    cur=${COMP_WORDS[COMP_CWORD]}
+    cur=`_get_cword`
     prev=${COMP_WORDS[COMP_CWORD-1]}
     plugins='ccache yum_cache root_cache bind_mount'
     cfgdir=/etc/mock
 
     count=0
-    for i in ${COMP_WORDS[@]} ; do
+    for i in "${COMP_WORDS[@]}" ; do
         [ $count -eq $COMP_CWORD ] && break
         if [[ "$i" == --configdir ]] ; then
             cfgdir="${COMP_WORDS[((count+1))]}"
@@ -24,7 +24,7 @@ _mock()
     done
 
     case $prev in
-        -r)
+        -@(-root|r))
             COMPREPLY=( $( command ls $cfgdir | \
                 sed -ne 's/^\('$cur'.*\)\.cfg$/\1/p') )
             return 0
@@ -47,19 +47,20 @@ _mock()
                 COMPREPLY=( $( compgen -W "$plugins" -- $cur ) )
                 return 0
                 ;;
-            --@(arch|define|with|without|uniqueext|rpmbuild_timeout))
+            --@(arch|target|define|with|without|uniqueext|rpmbuild_timeout|cwd))
                 return 0
                 ;;
         esac
     fi
 
     if [[ "$cur" == -* ]] ; then
-        COMPREPLY=( $( compgen -W '--version -h --help --rebuild --chroot \
-            --shell --clean --init --installdeps --install --update \
-            --orphanskill -r --offline --no-clean --cleanup-after \
-            --no-cleanup-after --arch= --define= --with= --without= \
-            --resultdir= --uniqueext= --configdir= --rpmbuild_timeout -v \
-            --verbose -q --quiet --trace --enable-plugin= --disable-plugin=' \
+        COMPREPLY=( $( compgen -W '--version -h --help --rebuild --shell \
+            --chroot --clean --init --installdeps --install --update \
+            --orphanskill -r --root= --offline --no-clean --cleanup-after \
+            --no-cleanup-after --arch= --target= -D --define= --with= \
+            --without= --resultdir= --uniqueext= --configdir= \
+            --rpmbuild_timeout --unpriv --cwd= -v --verbose -q --quiet \
+            --trace --enable-plugin= --disable-plugin= --print-root-path' \
             -- $cur ) )
     else
         _filedir '?(no)src.rpm'

@@ -1,0 +1,39 @@
+--- bash_completion~	2008-09-11 21:22:40.000000000 +0300
++++ bash_completion	2009-01-05 23:31:44.000000000 +0200
+@@ -761,9 +761,9 @@
+ 
+ 	_expand || return 0
+ 
+-	# default completion if parameter contains /
++	# file based completion if parameter contains /
+ 	if [[ "$cur" == */* ]]; then
+-		_filedir
++		_filedir '@([0-9]?([px])|[ln]|man)?(.@(gz|bz2|lzma))'
+ 		return 0
+ 	fi
+ 
+@@ -783,7 +783,7 @@
+ 	fi
+ 
+ 	# determine manual section to search
+-	[[ "$prev" == [0-9ln] ]] && sect=$prev || sect='*'
++	[[ "$prev" == @([0-9]?([px])|[ln]) ]] && sect=$prev || sect='*'
+ 
+ 	manpath=$manpath:
+ 	if [ -n "$cur" ]; then
+@@ -800,7 +800,14 @@
+ 	COMPREPLY=( ${COMPREPLY[@]%.@(gz|bz2|lzma)} )
+ 	COMPREPLY=( $( compgen -W '${COMPREPLY[@]%.*}' -- "${cur//\\\\/}" ) )
+ 
+-	[[ "$prev" != [0-9ln] ]] && _filedir '[0-9ln]'
++	if [[ "$prev" != @([0-9]?([px])|[lnop]) ]]; then
++		# file based completion for the rest, prepending ./ if needed
++		local start=${#COMPREPLY[@]}
++		_filedir '@([0-9]?([px])|[ln]|man)?(.@(gz|bz2|lzma))'
++		for (( i=$start; i < ${#COMPREPLY[@]}; i++ )); do
++			[[ ${COMPREPLY[i]} == */* ]] || COMPREPLY[i]=./${COMPREPLY[i]}
++		done
++	fi
+ 
+ 	return 0
+ }
