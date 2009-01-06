@@ -13,12 +13,12 @@ Source3:        %{name}-repomanage
 Source4:        %{name}-plague-client
 Patch0:         %{name}-20080705-rpm-installed.patch
 Patch1:         %{name}-20060301-yum-available-speedup-478784.patch
-Patch2:         %{name}-20060301-man.patch
+Patch2:         %{name}-20080705-lzma.patch
 Patch3:         %{name}-20080705-jpeg2000-304771.patch
 Patch4:         %{name}-20080705-mediafiles-444467.patch
 Patch5:         %{name}-20080705-svn-filenames-430059.patch
 Patch6:         %{name}-20080705-gzip.patch
-Patch7:         %{name}-20080705-lzma.patch
+Patch7:         %{name}-20060301-man.patch
 Patch8:         %{name}-20080705-rpm-backups.patch
 Patch9:         %{name}-20060301-rpm-eval.patch
 Patch10:        %{name}-20080705-getent.patch
