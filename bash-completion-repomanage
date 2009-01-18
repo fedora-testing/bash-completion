@@ -1,24 +1,24 @@
-# bash completion for repomanage                                     -*- sh -*-
+# -*- mode: shell-script; sh-basic-offset: 8; indent-tabs-mode: t -*-
+# ex: ts=8 sw=8 noet filetype=sh
+#
+# bash completion for repomanage
 
+have repomanage &&
 _repomanage()
 {
-    local cur prev
+	local cur prev
 
-    COMPREPLY=()
-    cur=`_get_cword`
-    prev=${COMP_WORDS[COMP_CWORD-1]}
+	COMPREPLY=()
+	cur=`_get_cword`
+	prev=${COMP_WORDS[COMP_CWORD-1]}
 
-    case $prev in
-        -@(h|-help|k|-keep))
-            return 0
-            ;;
-    esac
+	[[ "$prev" == -@(h|-help|k|-keep) ]] && return 0
 
-    if [[ "$cur" == -* ]] ; then
-        COMPREPLY=( $( compgen -W '-o --old -n --new -s --space -k --keep \
-            -c --nocheck -h --help' -- $cur ) )
-    else
-        _filedir -d
-    fi
-}
-complete -F _repomanage repomanage
+	if [[ "$cur" == -* ]] ; then
+		COMPREPLY=( $( compgen -W '-o --old -n --new -s --space -k \
+				--keep -c --nocheck -h --help' -- $cur ) )
+	else
+		_filedir -d
+	fi
+} &&
+complete -F _repomanage $filenames repomanage

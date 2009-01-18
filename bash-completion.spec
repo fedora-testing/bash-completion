@@ -1,28 +1,24 @@
+%define snap    20090115bzr1252
+
 Name:           bash-completion
 Version:        20080705
-Release:        1
+Release:        2%{?snap:.%{snap}}
 Summary:        Programmable completion for Bash
 
 Group:          System Environment/Shells
 License:        GPLv2+
 URL:            http://bash-completion.alioth.debian.org/
+# Snapshot tarballs created with Source99
+%if 0%{?snap:1}
+Source0:        %{name}-%{snap}.tar.bz2
+%else
 Source0:        http://ftp.debian.org/debian/pool/main/b/bash-completion/%{name}_%{version}.tar.gz
+%endif
 Source1:        %{name}-lzop
 Source2:        %{name}-mock
 Source3:        %{name}-repomanage
 Source4:        %{name}-plague-client
-Patch0:         %{name}-20080705-rpm-installed.patch
-Patch1:         %{name}-20060301-yum-available-speedup-478784.patch
-Patch2:         %{name}-20080705-lzma.patch
-Patch3:         %{name}-20080705-jpeg2000-304771.patch
-Patch4:         %{name}-20080705-mediafiles-444467.patch
-Patch5:         %{name}-20080705-svn-filenames-430059.patch
-Patch6:         %{name}-20080705-gzip.patch
-Patch7:         %{name}-20060301-man.patch
-Patch8:         %{name}-20080705-rpm-backups.patch
-Patch9:         %{name}-20060301-rpm-eval.patch
-Patch10:        %{name}-20080705-getent.patch
-Patch11:        %{name}-20060301-sqlite.patch
+Source99:       %{name}-snapshot.sh
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -34,24 +30,12 @@ of the programmable completion feature of bash 2.
 
 
 %prep
-%setup -q -n %{name}
-%patch0
-%patch1
-%patch2
-%patch3
-%patch4
-%patch5
-%patch6
-%patch7
-%patch8
-%patch9 -p1
-%patch10
-%patch11 -p1
+%setup -q -n %{name}%{?snap:-%{snap}}
 install -pm 644 %{SOURCE1} contrib/lzop
 install -pm 644 %{SOURCE2} contrib/mock
 install -pm 644 %{SOURCE3} contrib/repomanage
 install -pm 644 %{SOURCE4} contrib/plague-client
-
+rm contrib/hg # Updated version shipped in the mercurial package
 
 %build
 
@@ -80,7 +64,7 @@ rm -rf $RPM_BUILD_ROOT
 %define do_triggerun() [ $2 -gt 0 ] || rm -f %{_sysconfdir}/bash_completion.d/%1 || :
 
 # Not handled (yet?):
-# bitkeeper, harbour, larch, lisp, p4, povray
+# apache2ctl, bitkeeper, harbour, larch, lisp, p4, povray
 
 %triggerin -- bittorrent
 %do_triggerin bittorrent
@@ -122,10 +106,20 @@ rm -rf $RPM_BUILD_ROOT
 %triggerun -- gkrellm
 %do_triggerun gkrellm
 
+%triggerin -- gnupg2
+%do_triggerin gpg2
+%triggerun -- gnupg2
+%do_triggerun gpg2
+
 %triggerin -- lilypond
 %do_triggerin lilypond
 %triggerun -- lilypond
 %do_triggerun lilypond
+
+%triggerin -- lzma
+%do_triggerin lzma
+%triggerun -- lzma
+%do_triggerun lzma
 
 %triggerin -- lzop
 %do_triggerin lzop
@@ -142,20 +136,25 @@ rm -rf $RPM_BUILD_ROOT
 %triggerun -- mcrypt
 %do_triggerun mcrypt
 
-%triggerin -- mercurial
-%do_triggerin hg
-%triggerun -- mercurial
-%do_triggerun hg
-
 %triggerin -- mock
 %do_triggerin mock
 %triggerun -- mock
 %do_triggerun mock
 
+%triggerin -- monodevelop
+%do_triggerin monodevelop
+%triggerun -- monodevelop
+%do_triggerun monodevelop
+
 %triggerin -- mtx
 %do_triggerin mtx
 %triggerun -- mtx
 %do_triggerun mtx
+
+%triggerin -- openssh-clients
+%do_triggerin ssh
+%triggerun -- openssh-clients
+%do_triggerun ssh
 
 %triggerin -- perl-SVK
 %do_triggerin svk
@@ -166,6 +165,11 @@ rm -rf $RPM_BUILD_ROOT
 %do_triggerin plague-client
 %triggerun -- plague-client
 %do_triggerun plague-client
+
+%triggerin -- qt
+%do_triggerin qdbus
+%triggerun -- qt
+%do_triggerun qdbus
 
 %triggerin -- ruby-ri
 %do_triggerin ri
@@ -186,6 +190,11 @@ rm -rf $RPM_BUILD_ROOT
 %do_triggerin snownews
 %triggerun -- snownews
 %do_triggerun snownews
+
+%triggerin -- subversion
+%do_triggerin _subversion
+%triggerun -- subversion
+%do_triggerun _subversion
 
 %triggerin -- unace
 %do_triggerin unace
@@ -218,6 +227,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sun Jan 18 2009 Ville Skyttä <ville.skytta at iki.fi> - 20080705-2.20090115bzr1252
+- r1252 snapshot; all patches applied upstream.
+- Do not install mercurial completion, an updated version is shipped with it.
+- Improve lzop and repomanage completion.
+
 * Tue Jan  6 2009 Ville Skyttä <ville.skytta at iki.fi> - 20080705-1
 - 20080705; new upstream at http://bash-completion.alioth.debian.org/
 - Perl, Debian, and scp patches applied upstream.

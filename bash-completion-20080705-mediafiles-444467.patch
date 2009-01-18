@@ -1,8 +1,0 @@
---- bash_completion~	2008-07-05 16:55:03.000000000 +0300
-+++ bash_completion	2009-01-06 18:55:49.000000000 +0200
-@@ -112 +112 @@
--complete -f -X '!*.@(mp?(e)g|MP?(E)G|wma|avi|AVI|asf|vob|VOB|bin|dat|divx|DIVX|vcd|ps|pes|fli|flv|FLV|viv|rm|ram|yuv|mov|MOV|qt|QT|wmv|mp3|MP3|m4[pv]|M4[PV]|ogg|OGG|ogm|OGM|mp4|MP4|wav|WAV|asx|ASX|mng|MNG|srt)' xine aaxine fbxine kaffeine
-+complete -f -X '!*@(.@(mp?(e)g|MP?(E)G|wm[av]|WM[AV]|avi|AVI|as[fx]|AS[FX]|vob|VOB|bin|BIN|dat|DAT|divx|DIVX|vcd|VCD|p?(e)s|P?(E)S|fl[iv]|FL[IV]|viv|VIV|rm?(j)|RM?(J)|ra?(m)|RA?(M)|yuv|YUV|mov|MOV|qt|QT|mp[234]|MP[234]|m4[pv]|M4[PV]|og[gm]|OG[GM]|wav|WAV|mng|MNG|srt|SRT|mkv|MKV|[0-9]*.@(vdr|VDR))' xine aaxine fbxine kaffeine
-@@ -6090 +6090 @@
--			_filedir '@(mp?(e)g|MP?(E)G|wm[av]|WM[AV]|avi|AVI|asf|ASF|vob|VOB|bin|BIN|dat|DAT|vcd|VCD|ps|PS|pes|PES|fl[iv]|FL[IV]|viv|VIV|rm?(j)|RM?(J)|ra?(m)|RA?(M)|yuv|YUV|mov|MOV|qt|QT|mp[34]|MP[34]|m4[av]|M4[AV]|og[gm]|OG[GM]|w?(a)v|W?(A)V|dump|DUMP|mk[av]|MK[AV]|m4a|M4A|aac|AAC|m2v|M2V|dv|DV|rmvb|RMVB|mid|MID|ts|TS|3g[p2]|mpc|MPC|flac|FLAC|vro|VRO|divx|DIVX|aif?(f)|AIF?(F)|m2ts|M2TS)'
-+			_filedir '@(mp?(e)g|MP?(E)G|wm[av]|WM[AV]|avi|AVI|asf|ASF|vob|VOB|bin|BIN|dat|DAT|vcd|VCD|p?(e)s|P?(E)S|fl[iv]|FL[IV]|viv|VIV|rm?(j)|RM?(J)|ra?(m)|RA?(M)|yuv|YUV|mov|MOV|qt|QT|mp[234]|MP[234]|m4[av]|M4[AV]|og[gm]|OG[GM]|w?(a)v|W?(A)V|dump|DUMP|mk[av]|MK[AV]|m4a|M4A|aac|AAC|m2v|M2V|dv|DV|rmvb|RMVB|mid|MID|ts|TS|3g[p2]|3G[P2]|mpc|MPC|flac|FLAC|vro|VRO|divx|DIVX|aif?(f)|AIF?(F)|m2ts|M2TS|vdr|VDR)'
