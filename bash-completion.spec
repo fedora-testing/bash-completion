@@ -1,4 +1,4 @@
-%define snap    20090115bzr1252
+%define snap    20090211git47d0c5b
 
 Name:           bash-completion
 Version:        20080705
@@ -10,14 +10,12 @@ License:        GPLv2+
 URL:            http://bash-completion.alioth.debian.org/
 # Snapshot tarballs created with Source99
 %if 0%{?snap:1}
-Source0:        %{name}-%{snap}.tar.bz2
+Source0:        %{name}-%{snap}.tar.gz
 %else
 Source0:        http://ftp.debian.org/debian/pool/main/b/bash-completion/%{name}_%{version}.tar.gz
 %endif
-Source1:        %{name}-lzop
-Source2:        %{name}-mock
-Source3:        %{name}-repomanage
-Source4:        %{name}-plague-client
+Source1:        %{name}-mock
+Source2:        %{name}-plague-client
 Source99:       %{name}-snapshot.sh
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -30,11 +28,10 @@ of the programmable completion feature of bash 2.
 
 
 %prep
-%setup -q -n %{name}%{?snap:-%{snap}}
-install -pm 644 %{SOURCE1} contrib/lzop
-install -pm 644 %{SOURCE2} contrib/mock
-install -pm 644 %{SOURCE3} contrib/repomanage
-install -pm 644 %{SOURCE4} contrib/plague-client
+%setup -q -n %{name}
+install -pm 644 %{SOURCE1} contrib/mock
+install -pm 644 %{SOURCE2} contrib/plague-client
+mv to_review/repomanage contrib/
 rm contrib/hg # Updated version shipped in the mercurial package
 
 %build
@@ -71,6 +68,11 @@ rm -rf $RPM_BUILD_ROOT
 %triggerun -- bittorrent
 %do_triggerun bittorrent
 
+%triggerin -- bridge-utils
+%do_triggerin brctl
+%triggerun -- bridge-utils
+%do_triggerun brctl
+
 %triggerin -- cksfv
 %do_triggerin cksfv
 %triggerun -- cksfv
@@ -80,6 +82,11 @@ rm -rf $RPM_BUILD_ROOT
 %do_triggerin clisp
 %triggerun -- clisp
 %do_triggerun clisp
+
+%triggerin -- cowsay
+%do_triggerin cowsay
+%triggerun -- cowsay
+%do_triggerun cowsay
 
 %triggerin -- dsniff
 %do_triggerin dsniff
@@ -136,6 +143,11 @@ rm -rf $RPM_BUILD_ROOT
 %triggerun -- mcrypt
 %do_triggerun mcrypt
 
+%triggerin -- minicom
+%do_triggerin minicom
+%triggerun -- minicom
+%do_triggerun minicom
+
 %triggerin -- mock
 %do_triggerin mock
 %triggerun -- mock
@@ -151,10 +163,20 @@ rm -rf $RPM_BUILD_ROOT
 %triggerun -- mtx
 %do_triggerun mtx
 
+%triggerin -- net-tools
+%do_triggerin net-tools
+%triggerun -- net-tools
+%do_triggerun net-tools
+
 %triggerin -- openssh-clients
 %do_triggerin ssh
 %triggerun -- openssh-clients
 %do_triggerun ssh
+
+%triggerin -- perl-CPANPLUS
+%do_triggerin cpan2dist
+%triggerun -- perl-CPANPLUS
+%do_triggerun cpan2dist
 
 %triggerin -- perl-SVK
 %do_triggerin svk
@@ -165,6 +187,16 @@ rm -rf $RPM_BUILD_ROOT
 %do_triggerin plague-client
 %triggerun -- plague-client
 %do_triggerun plague-client
+
+%triggerin -- qemu
+%do_triggerin qemu
+%triggerun -- qemu
+%do_triggerun qemu
+
+%triggerin -- quota
+%do_triggerin quota-tools
+%triggerun -- quota
+%do_triggerun quota-tools
 
 %triggerin -- qt
 %do_triggerin qdbus
@@ -227,6 +259,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Feb 11 2009 Ville Skyttä <ville.skytta at iki.fi> - 20080705-2.20090211git47d0c5b
+- git snapshot 47d0c5b, fixes #484578.
+- lzop and repomanage completions included upstream.
+
 * Sun Jan 18 2009 Ville Skyttä <ville.skytta at iki.fi> - 20080705-2.20090115bzr1252
 - r1252 snapshot; all patches applied upstream.
 - Do not install mercurial completion, an updated version is shipped with it.
