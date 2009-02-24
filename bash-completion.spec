@@ -2,7 +2,7 @@
 
 Name:           bash-completion
 Version:        20080705
-Release:        2%{?snap:.%{snap}}
+Release:        3%{?snap:.%{snap}}
 Summary:        Programmable completion for Bash
 
 Group:          System Environment/Shells
@@ -259,6 +259,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Feb 23 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 20080705-3.20090211git47d0c5b
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
+
 * Wed Feb 11 2009 Ville Skyttä <ville.skytta at iki.fi> - 20080705-2.20090211git47d0c5b
 - git snapshot 47d0c5b, fixes #484578.
 - lzop and repomanage completions included upstream.
