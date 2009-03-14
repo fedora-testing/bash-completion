@@ -1,69 +1,73 @@
-# bash completion for mock                                           -*- sh -*-
+# -*- mode: shell-script; sh-basic-offset: 8; indent-tabs-mode: t -*-
+# ex: ts=8 sw=8 noet filetype=sh
+#
+# bash completion for mock
 
 # TODO: --copyin, --copyout
 
 _mock()
 {
-    local cur prev plugins cfgdir
+	local cur prev plugins cfgdir
 
-    COMPREPLY=()
-    cur=`_get_cword`
-    prev=${COMP_WORDS[COMP_CWORD-1]}
-    plugins='ccache yum_cache root_cache bind_mount'
-    cfgdir=/etc/mock
+	COMPREPLY=()
+	cur=`_get_cword`
+	prev=${COMP_WORDS[COMP_CWORD-1]}
+	plugins='ccache yum_cache root_cache bind_mount'
+	cfgdir=/etc/mock
 
-    count=0
-    for i in "${COMP_WORDS[@]}" ; do
-        [ $count -eq $COMP_CWORD ] && break
-        if [[ "$i" == --configdir ]] ; then
-            cfgdir="${COMP_WORDS[((count+1))]}"
-        elif [[ "$i" == --configdir=* ]] ; then
-            cfgdir=${i/*=/}
-        fi
-        count=$((++count))
-    done
+	count=0
+	for i in "${COMP_WORDS[@]}" ; do
+		[ $count -eq $COMP_CWORD ] && break
+		if [[ "$i" == --configdir ]] ; then
+			cfgdir="${COMP_WORDS[((count+1))]}"
+		elif [[ "$i" == --configdir=* ]] ; then
+			cfgdir=${i/*=/}
+		fi
+		count=$((++count))
+	done
 
-    case $prev in
-        -@(-root|r))
-            COMPREPLY=( $( command ls $cfgdir | \
-                sed -ne 's/^\('$cur'.*\)\.cfg$/\1/p') )
-            return 0
-            ;;
-        -@(-help|h))
-            return 0
-            ;;
-    esac
+	case $prev in
+		-@(-root|r))
+			COMPREPLY=( $( command ls $cfgdir | \
+				sed -ne 's/^\('$cur'.*\)\.cfg$/\1/p') )
+			return 0
+			;;
+		-@(-help|h))
+			return 0
+			;;
+	esac
 
-    # --name=value style option
-    if [[ "$cur" == *=* ]] ; then
-        prev=${cur/=*/}
-        cur=${cur/*=/}
-        case $prev in 
-            --@(config|result)dir)
-                _filedir -d
-                return 0
-                ;;
-            --@(en|dis)able-plugin)
-                COMPREPLY=( $( compgen -W "$plugins" -- $cur ) )
-                return 0
-                ;;
-            --@(arch|target|define|with|without|uniqueext|rpmbuild_timeout|cwd))
-                return 0
-                ;;
-        esac
-    fi
+	# --name=value style option
+	if [[ "$cur" == *=* ]] ; then
+		prev=${cur/=*/}
+		cur=${cur/*=/}
+		case $prev in 
+			--@(config|result)dir)
+				_filedir -d
+				return 0
+				;;
+			--@(en|dis)able-plugin)
+				COMPREPLY=( $( compgen -W "$plugins" -- $cur ) )
+				return 0
+				;;
+			--@(arch|target|define|with|without|uniqueext|rpmbuild_timeout|cwd))
+				return 0
+				;;
+		esac
+	fi
 
-    if [[ "$cur" == -* ]] ; then
-        COMPREPLY=( $( compgen -W '--version -h --help --rebuild --shell \
-            --chroot --clean --init --installdeps --install --update \
-            --orphanskill -r --root= --offline --no-clean --cleanup-after \
-            --no-cleanup-after --arch= --target= -D --define= --with= \
-            --without= --resultdir= --uniqueext= --configdir= \
-            --rpmbuild_timeout --unpriv --cwd= -v --verbose -q --quiet \
-            --trace --enable-plugin= --disable-plugin= --print-root-path' \
-            -- $cur ) )
-    else
-        _filedir '?(no)src.rpm'
-    fi
+	if [[ "$cur" == -* ]] ; then
+		COMPREPLY=( $( compgen -W '--version -h --help --rebuild \
+			--shell --chroot --clean --init --installdeps \
+			--install --update --orphanskill -r --root= --offline \
+			--no-clean --cleanup-after --no-cleanup-after --arch= \
+			--target= -D --define= --with= --without= \
+			--resultdir= --uniqueext= --configdir= \
+			--rpmbuild_timeout --unpriv --cwd= -v --verbose -q \
+			--quiet --trace --enable-plugin= --disable-plugin= \
+			--print-root-path' -- $cur ) )
+	else
+		_filedir '?(no)src.rpm'
+	fi
 }
 complete -F _mock $filenames mock
