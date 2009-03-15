@@ -1,4 +1,4 @@
-%define snap    20090211git47d0c5b
+%define snap    20090314gitf4f0984
 
 Name:           bash-completion
 Version:        20080705
@@ -32,7 +32,6 @@ of the programmable completion feature of bash 2.
 install -pm 644 %{SOURCE1} contrib/mock
 install -pm 644 %{SOURCE2} contrib/plague-client
 mv to_review/repomanage contrib/
-rm contrib/hg # Updated version shipped in the mercurial package
 
 %build
 
@@ -203,6 +202,11 @@ rm -rf $RPM_BUILD_ROOT
 %triggerun -- qt
 %do_triggerun qdbus
 
+%triggerin -- rdesktop
+%do_triggerin rdesktop
+%triggerun -- rdesktop
+%do_triggerun rdesktop
+
 %triggerin -- ruby-ri
 %do_triggerin ri
 %triggerun -- ruby-ri
@@ -251,7 +255,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -f %{name}-ghosts.list
 %defattr(-,root,root,-)
-%doc README TODO debian/changelog debian/copyright
+%doc AUTHORS README TODO debian/changelog debian/copyright
 %config(noreplace) %{_sysconfdir}/profile.d/bash_completion.sh
 %{_sysconfdir}/bash_completion
 %dir %{_sysconfdir}/bash_completion.d/
@@ -259,6 +263,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sun Mar 15 2009 Ville Skyttä <ville.skytta at iki.fi> - 20080705-3.20090314gitf4f0984
+- git snapshot f4f0984, fixes #484578 (another issue), #486998.
+
 * Mon Feb 23 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 20080705-3.20090211git47d0c5b
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
 
