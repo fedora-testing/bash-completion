@@ -2,7 +2,7 @@
 
 Name:           bash-completion
 Version:        20080705
-Release:        3%{?snap:.%{snap}}
+Release:        4%{?snap:.%{snap}}
 Summary:        Programmable completion for Bash
 
 Group:          System Environment/Shells
@@ -21,6 +21,8 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
 Requires:       bash >= 2.05-12
+# For symlinking in triggers, #490768
+Requires:       coreutils
 
 %description
 bash-completion is a collection of shell functions that take advantage
@@ -263,6 +265,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Mar 23 2009 Ville Skyttä <ville.skytta at iki.fi> - 20080705-4.20090314gitf4f0984
+- Add dependency on coreutils for triggers (#490768).
+- Update and improve mock completion.
+
 * Sun Mar 15 2009 Ville Skyttä <ville.skytta at iki.fi> - 20080705-3.20090314gitf4f0984
 - git snapshot f4f0984, fixes #484578 (another issue), #486998.
 
