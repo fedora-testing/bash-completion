@@ -1,22 +1,16 @@
-%define snap    20090314gitf4f0984
-
 Name:           bash-completion
-Version:        20080705
-Release:        4%{?snap:.%{snap}}
+Version:        1.0
+Release:        1%{?dist}
+Epoch:          1
 Summary:        Programmable completion for Bash
 
 Group:          System Environment/Shells
 License:        GPLv2+
 URL:            http://bash-completion.alioth.debian.org/
-# Snapshot tarballs created with Source99
-%if 0%{?snap:1}
-Source0:        %{name}-%{snap}.tar.gz
-%else
-Source0:        http://ftp.debian.org/debian/pool/main/b/bash-completion/%{name}_%{version}.tar.gz
-%endif
+Source0:        http://bash-completion.alioth.debian.org/files/%{name}-%{version}.tar.gz
 Source1:        %{name}-mock
 Source2:        %{name}-plague-client
-Source99:       %{name}-snapshot.sh
+Source3:        %{name}-repomanage
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -30,10 +24,11 @@ of the programmable completion feature of bash 2.
 
 
 %prep
-%setup -q -n %{name}
+%setup -q
 install -pm 644 %{SOURCE1} contrib/mock
 install -pm 644 %{SOURCE2} contrib/plague-client
-mv to_review/repomanage contrib/
+install -pm 644 %{SOURCE3} contrib/repomanage
+
 
 %build
 
@@ -254,10 +249,15 @@ rm -rf $RPM_BUILD_ROOT
 %triggerun -- yum-utils
 %do_triggerun repomanage
 
+%triggerin -- vnc
+%do_triggerin vncviewer
+%triggerun -- vnc
+%do_triggerun vncviewer
+
 
 %files -f %{name}-ghosts.list
 %defattr(-,root,root,-)
-%doc AUTHORS README TODO debian/changelog debian/copyright
+%doc AUTHORS CHANGES COPYING README TODO
 %config(noreplace) %{_sysconfdir}/profile.d/bash_completion.sh
 %{_sysconfdir}/bash_completion
 %dir %{_sysconfdir}/bash_completion.d/
@@ -265,6 +265,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Apr  6 2009 Ville Skyttä <ville.skytta at iki.fi> - 1:1.0-1
+- 1.0.
+
 * Mon Mar 23 2009 Ville Skyttä <ville.skytta at iki.fi> - 20080705-4.20090314gitf4f0984
 - Add dependency on coreutils for triggers (#490768).
 - Update and improve mock completion.
