@@ -1,6 +1,6 @@
 Name:           bash-completion
 Version:        1.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
 
@@ -11,6 +11,8 @@ Source0:        http://bash-completion.alioth.debian.org/files/%{name}-%{version
 Source1:        %{name}-mock
 Source2:        %{name}-plague-client
 Source3:        %{name}-repomanage
+# http://git.debian.org/?p=bash-completion/bash-completion.git;a=commitdiff;h=1421e55aac075e13491cd212b796bdd453214a2c
+Patch0:         %{name}-1.0-bash4quoting-490322.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -25,6 +27,7 @@ of the programmable completion feature of bash 2.
 
 %prep
 %setup -q
+%patch0 -p1
 install -pm 644 %{SOURCE1} contrib/mock
 install -pm 644 %{SOURCE2} contrib/plague-client
 install -pm 644 %{SOURCE3} contrib/repomanage
@@ -265,6 +268,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Apr  7 2009 Ville Skyttä <ville.skytta at iki.fi> - 1:1.0-2
+- Apply upstream patch to fix quoting issues with bash 4.x (#490322).
+
 * Mon Apr  6 2009 Ville Skyttä <ville.skytta at iki.fi> - 1:1.0-1
 - 1.0.
 
