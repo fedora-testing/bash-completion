@@ -1,6 +1,6 @@
 Name:           bash-completion
 Version:        1.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
 
@@ -31,6 +31,7 @@ of the programmable completion feature of bash 2.
 install -pm 644 %{SOURCE1} contrib/mock
 install -pm 644 %{SOURCE2} contrib/plague-client
 install -pm 644 %{SOURCE3} contrib/repomanage
+rm contrib/cowsay # cowsay ships an updated one
 
 
 %build
@@ -81,11 +82,6 @@ rm -rf $RPM_BUILD_ROOT
 %do_triggerin clisp
 %triggerun -- clisp
 %do_triggerun clisp
-
-%triggerin -- cowsay
-%do_triggerin cowsay
-%triggerun -- cowsay
-%do_triggerun cowsay
 
 %triggerin -- dsniff
 %do_triggerin dsniff
@@ -268,6 +264,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Apr 18 2009 Ville Skyttä <ville.skytta at iki.fi> - 1:1.0-3
+- Do not install cowsay completion, an updated version is shipped with it.
+
 * Tue Apr  7 2009 Ville Skyttä <ville.skytta at iki.fi> - 1:1.0-2
 - Apply upstream patch to fix quoting issues with bash 4.x (#490322).
 
