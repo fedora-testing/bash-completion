@@ -1,6 +1,6 @@
 Name:           bash-completion
 Version:        1.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
 
@@ -264,6 +264,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Jul 24 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:1.0-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
+
 * Sat Apr 18 2009 Ville Skyttä <ville.skytta at iki.fi> - 1:1.0-3
 - Do not install cowsay completion, an updated version is shipped with it.
 
