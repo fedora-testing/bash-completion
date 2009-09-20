@@ -1,6 +1,6 @@
 Name:           bash-completion
 Version:        1.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
 
@@ -224,7 +224,11 @@ rm -rf $RPM_BUILD_ROOT
 %do_triggerun snownews
 
 %triggerin -- subversion
-%do_triggerin _subversion
+if [ -e %{_sysconfdir}/bash_completion.d/subversion ] ; then
+    rm -f %{_sysconfdir}/bash_completion.d/_subversion || :
+elif [ ! -e %{_sysconfdir}/bash_completion.d/_subversion ] ; then
+    ln -s %{_datadir}/%{name}/_subversion %{_sysconfdir}/bash_completion.d || :
+fi
 %triggerun -- subversion
 %do_triggerun _subversion
 
@@ -264,6 +268,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sun Sep 20 2009 Ville Skyttä <ville.skytta@iki.fi> - 1:1.0-5
+- Use svn completion from subversion instead of ours if available (#496456).
+
 * Fri Jul 24 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:1.0-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
 
