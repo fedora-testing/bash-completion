@@ -265,6 +265,7 @@ fi
 %changelog
 * Mon Oct 19 2009 Ville Skyttä <ville.skytta@iki.fi> - 1:1.1-1
 - Update to 1.1.
+- bash 4 quoting fix, mock and repomanage completions included upstream.
 
 * Sun Sep 20 2009 Ville Skyttä <ville.skytta@iki.fi> - 1:1.0-5
 - Use svn completion from subversion instead of ours if available (#496456).
