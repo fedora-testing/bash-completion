@@ -1,6 +1,6 @@
 Name:           bash-completion
 Version:        1.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
 
@@ -34,6 +34,7 @@ install -pm 644 %{SOURCE3} bash_completion.sh
 # Updated completions shipped upstream:
 rm contrib/cowsay
 # subversion too, but only in >= 1.6.5-2
+# yum-utils (repomanage) too, but only in >= 1.1.24
 # yum planned to be upstreamed soon
 
 # Combine to per-package files:
@@ -188,7 +189,16 @@ rm -rf $RPM_BUILD_ROOT
 %bashcomp_trigger quota-tools quota
 %bashcomp_trigger rcs
 %bashcomp_trigger rdesktop
-%bashcomp_trigger repomanage yum-utils
+
+%triggerin -- yum-utils
+if [ -e %{_sysconfdir}/bash_completion.d/yum-utils.bash ] ; then
+    rm -f %{_sysconfdir}/bash_completion.d/repomanage || :
+elif [ ! -e %{_sysconfdir}/bash_completion.d/repomanage ] ; then
+    ln -s %{_datadir}/%{name}/repomanage %{_sysconfdir}/bash_completion.d || :
+fi
+%triggerun -- yum-utils
+[ $2 -gt 0 ] || rm -f %{_sysconfdir}/bash_completion.d/repomanage || :
+
 %bashcomp_trigger resolvconf
 %bashcomp_trigger rfkill
 %bashcomp_trigger ri ruby-ri
@@ -263,6 +273,9 @@ fi
 
 
 %changelog
+* Sun Nov  8 2009 Ville Skyttä <ville.skytta@iki.fi> - 1:1.1-2
+- Use yum-utils completion instead of ours if available.
+
 * Mon Oct 19 2009 Ville Skyttä <ville.skytta@iki.fi> - 1:1.1-1
 - Update to 1.1.
 - bash 4 quoting fix, mock and repomanage completions included upstream.
