@@ -1,6 +1,6 @@
 Name:           bash-completion
 Version:        1.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
 
@@ -35,7 +35,7 @@ install -pm 644 %{SOURCE3} bash_completion.sh
 rm contrib/cowsay
 # subversion too, but only in >= 1.6.5-2
 # yum-utils (repomanage) too, but only in >= 1.1.24
-# yum planned to be upstreamed soon
+# yum planned to be upstreamed soon (probably >= 3.2.26)
 
 # Combine to per-package files:
 ( echo ; cat contrib/update-alternatives ) >> contrib/chkconfig
@@ -246,7 +246,7 @@ fi
 %bashcomp_trigger yp-tools
 
 %triggerin -- yum
-if [ -e %{_sysconfdir}/bash_completion.d/yum ] ; then
+if [ -e %{_sysconfdir}/bash_completion.d/yum.bash ] ; then
     rm -f %{_sysconfdir}/bash_completion.d/_yum || :
 elif [ ! -e %{_sysconfdir}/bash_completion.d/_yum ] ; then
     ln -s %{_datadir}/%{name}/_yum %{_sysconfdir}/bash_completion.d || :
@@ -273,6 +273,9 @@ fi
 
 
 %changelog
+* Tue Nov 17 2009 Ville Skyttä <ville.skytta@iki.fi> - 1:1.1-3
+- Prepare for smooth coexistence with yum upstream completion.
+
 * Sun Nov  8 2009 Ville Skyttä <ville.skytta@iki.fi> - 1:1.1-2
 - Use yum-utils completion instead of ours if available.
 
