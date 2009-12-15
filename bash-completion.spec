@@ -1,6 +1,6 @@
 Name:           bash-completion
 Version:        1.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
 
@@ -35,7 +35,7 @@ install -pm 644 %{SOURCE3} bash_completion.sh
 rm contrib/cowsay
 # subversion too, but only in >= 1.6.5-2
 # yum-utils (repomanage) too, but only in >= 1.1.24
-# yum planned to be upstreamed soon (probably >= 3.2.26)
+# yum too, but only in >= 3.2.25-2
 
 # Combine to per-package files:
 ( echo ; cat contrib/update-alternatives ) >> contrib/chkconfig
@@ -98,7 +98,10 @@ cd -
 rm -rf $RPM_BUILD_ROOT
 
 
-%global bashcomp_trigger() \
+# Note that this *must* be %%define, not %%global, otherwise the %%{?2}/%%{!?2}
+# conditional is apparently evaluated too early (at spec parse time when arg 2
+# is never defined)?
+%define bashcomp_trigger() \
 %triggerin -- %{?2}%{!?2:%1}\
 [ -e %{_sysconfdir}/bash_completion.d/%1 ] ||\
     ln -s %{_datadir}/%{name}/%1 %{_sysconfdir}/bash_completion.d || :\
@@ -163,14 +166,24 @@ rm -rf $RPM_BUILD_ROOT
 %bashcomp_trigger minicom
 %bashcomp_trigger mkinitrd
 %bashcomp_trigger mock
-%bashcomp_trigger modules environment-modules
+
+%triggerin -- environment-modules
+if [ -e %{_datadir}/Modules/init/bash_completion ] ; then
+    # Upstream completion in environment-modules >= 3.2.7
+    rm -f %{_sysconfdir}/bash_completion.d/modules || :
+elif [ ! -e %{_sysconfdir}/bash_completion.d/modules ] ; then
+    ln -s %{_datadir}/%{name}/modules %{_sysconfdir}/bash_completion.d || :
+fi
+%triggerun -- environment-modules
+[ $2 -gt 0 ] || rm -f %{_sysconfdir}/bash_completion.d/modules || :
+
 %bashcomp_trigger monodevelop
 %bashcomp_trigger mplayer
 %bashcomp_trigger msynctool
 %bashcomp_trigger mtx
 %bashcomp_trigger munin-node
 %bashcomp_trigger mutt
-%bashcomp_trigger mysqladmin mysql
+%bashcomp_trigger mysqladmin mysql,MySQL-client-community
 %bashcomp_trigger ncftp
 %bashcomp_trigger net-tools
 %bashcomp_trigger ntpdate
@@ -192,6 +205,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %triggerin -- yum-utils
 if [ -e %{_sysconfdir}/bash_completion.d/yum-utils.bash ] ; then
+    # Upstream completion in yum-utils >= 1.1.24
     rm -f %{_sysconfdir}/bash_completion.d/repomanage || :
 elif [ ! -e %{_sysconfdir}/bash_completion.d/repomanage ] ; then
     ln -s %{_datadir}/%{name}/repomanage %{_sysconfdir}/bash_completion.d || :
@@ -218,6 +232,7 @@ fi
 
 %triggerin -- subversion
 if [ -e %{_sysconfdir}/bash_completion.d/subversion ] ; then
+    # Upstream completion in subversion >= 1.6.5-2
     rm -f %{_sysconfdir}/bash_completion.d/_subversion || :
 elif [ ! -e %{_sysconfdir}/bash_completion.d/_subversion ] ; then
     ln -s %{_datadir}/%{name}/_subversion %{_sysconfdir}/bash_completion.d || :
@@ -247,6 +262,7 @@ fi
 
 %triggerin -- yum
 if [ -e %{_sysconfdir}/bash_completion.d/yum.bash ] ; then
+    # Upstream completion in yum >= 3.2.25-2
     rm -f %{_sysconfdir}/bash_completion.d/_yum || :
 elif [ ! -e %{_sysconfdir}/bash_completion.d/_yum ] ; then
     ln -s %{_datadir}/%{name}/_yum %{_sysconfdir}/bash_completion.d || :
@@ -273,6 +289,11 @@ fi
 
 
 %changelog
+* Tue Dec 15 2009 Ville Skyttä <ville.skytta@iki.fi> - 1:1.1-4
+- Fix autoinstall of completions named other than the package (#546905).
+- Use environment-modules upstream completion instead of ours if available.
+- Autoinstall mysqladmin completion also on MySQL-client-community.
+
 * Tue Nov 17 2009 Ville Skyttä <ville.skytta@iki.fi> - 1:1.1-3
 - Prepare for smooth coexistence with yum upstream completion.
 
