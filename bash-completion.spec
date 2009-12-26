@@ -1,6 +1,6 @@
 Name:           bash-completion
 Version:        1.1
-Release:        4%{?dist}
+Release:        5%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
 
@@ -13,6 +13,8 @@ Source1:        %{name}-plague-client
 Source2:        http://bash-completion.alioth.debian.org/files/CHANGES-1.1
 # http://git.debian.org/?p=bash-completion/bash-completion.git;a=blob_plain;f=bash_completion.sh;h=915960b614ef7644f9abaa99ed9ef0faa7ac5477;hb=HEAD
 Source3:        bash_completion.sh
+# From upstream post 1.1.
+Patch0:         %{name}-1.1-vncviewer.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -27,6 +29,7 @@ of the programmable completion feature of bash 2.
 
 %prep
 %setup -q
+%patch0 -p1
 install -pm 644 %{SOURCE1} contrib/plague-client
 install -pm 644 %{SOURCE2} CHANGES
 install -pm 644 %{SOURCE3} bash_completion.sh
@@ -122,7 +125,7 @@ rm -rf $RPM_BUILD_ROOT
 %bashcomp_trigger bzip2
 %bashcomp_trigger cfengine
 %bashcomp_trigger chkconfig
-%bashcomp_trigger chsh util-linux-ng
+%bashcomp_trigger chsh util-linux-ng,util-linux
 %bashcomp_trigger cksfv
 %bashcomp_trigger clisp
 %bashcomp_trigger cpan2dist perl-CPANPLUS
@@ -246,7 +249,7 @@ fi
 %bashcomp_trigger tcpdump
 %bashcomp_trigger unace
 %bashcomp_trigger unrar
-%bashcomp_trigger vncviewer vnc
+%bashcomp_trigger vncviewer tigervnc,vnc
 %bashcomp_trigger vpnc
 %bashcomp_trigger wireless-tools
 %bashcomp_trigger wodim
@@ -289,6 +292,11 @@ fi
 
 
 %changelog
+* Sat Dec 26 2009 Ville Skyttä <ville.skytta@iki.fi> - 1:1.1-5
+- Apply upstream post 1.1 generic vncviewer fixes.
+- Autoinstall vncviewer completion also on tigervnc.
+- Autoinstall chsh completion also on util-linux.
+
 * Tue Dec 15 2009 Ville Skyttä <ville.skytta@iki.fi> - 1:1.1-4
 - Fix autoinstall of completions named other than the package (#546905).
 - Use environment-modules upstream completion instead of ours if available.
