@@ -1,6 +1,6 @@
 Name:           bash-completion
 Version:        1.1
-Release:        5%{?dist}
+Release:        7%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
 
@@ -15,6 +15,7 @@ Source2:        http://bash-completion.alioth.debian.org/files/CHANGES-1.1
 Source3:        bash_completion.sh
 # From upstream post 1.1.
 Patch0:         %{name}-1.1-vncviewer.patch
+Patch1:         %{name}-1.1-service.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -30,6 +31,7 @@ of the programmable completion feature of bash 2.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 install -pm 644 %{SOURCE1} contrib/plague-client
 install -pm 644 %{SOURCE2} CHANGES
 install -pm 644 %{SOURCE3} bash_completion.sh
@@ -49,8 +51,6 @@ rm contrib/apache2ctl
 rm contrib/apt-build
 rm contrib/aptitude
 rm contrib/cardctl
-rm contrib/dpkg
-rm contrib/dselect
 rm contrib/heimdal
 rm contrib/kldload
 rm contrib/lilo
@@ -135,6 +135,8 @@ rm -rf $RPM_BUILD_ROOT
 %bashcomp_trigger dcop kdelibs3
 %bashcomp_trigger dhclient
 %bashcomp_trigger dict dictd
+%bashcomp_trigger dpkg
+%bashcomp_trigger dselect
 %bashcomp_trigger dsniff
 %bashcomp_trigger findutils
 %bashcomp_trigger freeciv
@@ -292,6 +294,12 @@ fi
 
 
 %changelog
+* Fri Mar 12 2010 Ville Skyttä <ville.skytta@iki.fi> - 1:1.1-7
+- Autoinstall dpkg and dselect completions.
+
+* Thu Mar 11 2010 Todd Zullinger <tmz@pobox.com> - 1:1.1-6
+- Apply upstream post 1.1 service argument fix (#572794).
+
 * Sat Dec 26 2009 Ville Skyttä <ville.skytta@iki.fi> - 1:1.1-5
 - Apply upstream post 1.1 generic vncviewer fixes.
 - Autoinstall vncviewer completion also on tigervnc.
