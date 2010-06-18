@@ -1,3 +1,6 @@
+# Expected failures in mock, hangs in koji
+%bcond_with tests
+
 Name:           bash-completion
 Version:        1.2
 Release:        1%{?dist}
@@ -12,9 +15,11 @@ Source1:        %{name}-plague-client
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
+%if %{with tests}
 BuildRequires:  dejagnu
 BuildRequires:  screen
 BuildRequires:  tcllib
+%endif
 Requires:       bash >= 3.2
 # For symlinking in triggers, #490768
 Requires:       coreutils
@@ -103,6 +108,7 @@ done
 cd -
 
 
+%if %{with tests}
 %check
 # Should be done/fixed upstream
 mkdir test/log test/tmp
@@ -114,7 +120,8 @@ screen -D -m sh -c '( make check ; echo $? ) >'$tmpfile
 cat $tmpfile
 result=$(tail -n 1 $tmpfile)
 rm -f $tmpfile
-exit 0 # $result, but we have some pretty certain failures in mock for now...
+exit $result
+%endif
 
 
 %clean
