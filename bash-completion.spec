@@ -3,7 +3,7 @@
 
 Name:           bash-completion
 Version:        1.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
 
@@ -12,6 +12,8 @@ License:        GPLv2+
 URL:            http://bash-completion.alioth.debian.org/
 Source0:        http://bash-completion.alioth.debian.org/files/%{name}-%{version}.tar.bz2
 Source1:        %{name}-plague-client
+# From upstream post-1.2 git
+Patch0:         %{name}-1.2-init.d.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -31,6 +33,7 @@ of the programmable completion feature of bash.
 
 %prep
 %setup -q
+%patch0 -p1
 install -pm 644 %{SOURCE1} contrib/plague-client
 
 # Updated completions shipped upstream:
@@ -346,6 +349,9 @@ fi
 
 
 %changelog
+* Mon Jun 28 2010 Ville Skyttä <ville.skytta@iki.fi> - 1:1.2-2
+- Apply upstream post 1.2 /etc/init.d/* completion improvements to fix #608351.
+
 * Wed Jun 16 2010 Ville Skyttä <ville.skytta@iki.fi> - 1:1.2-1
 - Update to 1.2, all patches applied upstream.
 - Fixes #444469, #538433, #541423, and #601813, works around #585384.
