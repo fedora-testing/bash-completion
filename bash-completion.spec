@@ -3,7 +3,7 @@
 
 Name:           bash-completion
 Version:        1.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
 
@@ -14,6 +14,12 @@ Source0:        http://bash-completion.alioth.debian.org/files/%{name}-%{version
 Source1:        %{name}-plague-client
 # From upstream post-1.2 git
 Patch0:         %{name}-1.2-init.d.patch
+# From upstream post-1.2 git, #628130
+Patch1:         %{name}-1.2-tilde-username-628130.patch
+# From upstream post-1.2 git, #630328
+Patch2:         %{name}-1.2-rpm-630328.patch
+# From upstream post-1.2 git, #630658
+Patch3:         %{name}-1.2-known_hosts-ipv6-630658.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -34,15 +40,20 @@ of the programmable completion feature of bash.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
 install -pm 644 %{SOURCE1} contrib/plague-client
 
 # Updated completions shipped upstream:
 rm contrib/cowsay
-# mock too, but only in >= 1.1.1
-# modules too, but only in >= 3.2.7
-# subversion too, but only in >= 1.6.5-2
-# yum-utils too, but only in >= 1.1.24
-# yum too, but only in >= 3.2.25-2
+rm contrib/_modules # environment-modules >= 3.2.7
+%if 0%{?fedora} || 0%{?rhel} > 5
+rm contrib/_mock # mock >= 1.1.1
+rm contrib/_subversion # subversion >= 1.6.5-2
+rm contrib/_yum-utils # yum-utils >= 1.1.24
+rm contrib/_yum # yum >= 3.2.25-2
+%endif
 
 # Combine to per-package files to work around #585384:
 cd contrib
@@ -208,6 +219,7 @@ rm -rf $RPM_BUILD_ROOT
 %bashcomp_trigger minicom
 %bashcomp_trigger mkinitrd
 
+%if 0%{?rhel} && 0%{?rhel} < 6
 %triggerin -- mock
 if [ -e %{_sysconfdir}/bash_completion.d/mock.bash ] ; then
     # Upstream completion in mock >= 1.1.1
@@ -217,16 +229,7 @@ elif [ ! -e %{_sysconfdir}/bash_completion.d/_mock ] ; then
 fi
 %triggerun -- mock
 [ $2 -gt 0 ] || rm -f %{_sysconfdir}/bash_completion.d/_mock || :
-
-%triggerin -- environment-modules
-if [ -e %{_datadir}/Modules/init/bash_completion ] ; then
-    # Upstream completion in environment-modules >= 3.2.7
-    rm -f %{_sysconfdir}/bash_completion.d/_modules || :
-elif [ ! -e %{_sysconfdir}/bash_completion.d/_modules ] ; then
-    ln -s %{_datadir}/%{name}/_modules %{_sysconfdir}/bash_completion.d || :
-fi
-%triggerun -- environment-modules
-[ $2 -gt 0 ] || rm -f %{_sysconfdir}/bash_completion.d/_modules || :
+%endif
 
 %bashcomp_trigger monodevelop
 %bashcomp_trigger mplayer
@@ -251,7 +254,14 @@ fi
 %bashcomp_trigger povray
 %bashcomp_trigger procps
 %bashcomp_trigger python
-%bashcomp_trigger qdbus qt,kdelibs3
+
+%triggerin -- qt,kdelibs3,kdelibs
+[ -e %{_sysconfdir}/bash_completion.d/qdbus ] || \
+    ln -s %{_datadir}/%{name}/qdbus %{_sysconfdir}/bash_completion.d || :
+%triggerpostun -- qt,kdelibs3,kdelibs
+[ $2 -gt 0 ] || [ -x %{_bindir}/dcop ] || [ -x %{_bindir}/qdbus ] || \
+    rm -f %{_sysconfdir}/bash_completion.d/qdbus || :
+
 %bashcomp_trigger qemu
 %bashcomp_trigger quota-tools quota
 %bashcomp_trigger rcs
@@ -274,6 +284,7 @@ fi
 %bashcomp_trigger sshfs fuse-sshfs
 %bashcomp_trigger strace
 
+%if 0%{?rhel} && 0%{?rhel} < 6
 %triggerin -- subversion
 if [ -e %{_sysconfdir}/bash_completion.d/subversion ] ; then
     # Upstream completion in subversion >= 1.6.5-2
@@ -283,6 +294,7 @@ elif [ ! -e %{_sysconfdir}/bash_completion.d/_subversion ] ; then
 fi
 %triggerun -- subversion
 [ $2 -gt 0 ] || rm -f %{_sysconfdir}/bash_completion.d/_subversion || :
+%endif
 
 %bashcomp_trigger svk perl-SVK
 %bashcomp_trigger tar
@@ -306,6 +318,7 @@ fi
 %bashcomp_trigger xz
 %bashcomp_trigger yp-tools
 
+%if 0%{?rhel} && 0%{?rhel} < 6
 %triggerin -- yum
 if [ -e %{_sysconfdir}/bash_completion.d/yum.bash ] ; then
     # Upstream completion in yum >= 3.2.25-2
@@ -325,6 +338,7 @@ elif [ ! -e %{_sysconfdir}/bash_completion.d/_yum-utils ] ; then
 fi
 %triggerun -- yum-utils
 [ $2 -gt 0 ] || rm -f %{_sysconfdir}/bash_completion.d/_yum-utils || :
+%endif
 
 %bashcomp_trigger yum-arch
 
@@ -349,6 +363,13 @@ fi
 
 
 %changelog
+* Tue Sep 28 2010 Ville Skyttä <ville.skytta@iki.fi> - 1:1.2-3
+- Apply upstream ~username completion fix for #628130.
+- Apply upstream rpm completion improvements for #630328.
+- Apply upstream IPv6 address completion fix for #630658.
+- Drop some completions that are included in respective upstream packages.
+- Fix qdbus/dcop uninstall trigger.
+
 * Mon Jun 28 2010 Ville Skyttä <ville.skytta@iki.fi> - 1:1.2-2
 - Apply upstream post 1.2 /etc/init.d/* completion improvements to fix #608351.
 
