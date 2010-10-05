@@ -3,7 +3,7 @@
 
 Name:           bash-completion
 Version:        1.2
-Release:        3%{?dist}
+Release:        4%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
 
@@ -363,6 +363,9 @@ fi
 
 
 %changelog
+* Tue Oct  5 2010 Ville Skyttä <ville.skytta@iki.fi> - 1:1.2-4
+- More IPv6 address completion fixes, #630658.
+
 * Tue Sep 28 2010 Ville Skyttä <ville.skytta@iki.fi> - 1:1.2-3
 - Apply upstream ~username completion fix for #628130.
 - Apply upstream rpm completion improvements for #630328.
