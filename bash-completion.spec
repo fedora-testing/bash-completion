@@ -3,7 +3,7 @@
 
 Name:           bash-completion
 Version:        1.2
-Release:        4%{?dist}
+Release:        5%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
 
@@ -359,7 +359,7 @@ fi
 
 
 %changelog
-* Wed Oct 13 2010 Ville Skyttä <ville.skytta@iki.fi>
+* Wed Oct 13 2010 Ville Skyttä <ville.skytta@iki.fi> - 1:1.2-5
 - Install util-linux completions unconditionally.
 - Make trigger target package rename etc tracking easier to maintain, and
   handle man-db/man (#642193, Yanko Kaneti), mysql/MySQL-client-community,
