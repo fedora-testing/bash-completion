@@ -212,7 +212,7 @@ rm -rf $RPM_BUILD_ROOT
 %bashcomp_trigger lzop
 %bashcomp_trigger mailman
 %bashcomp_trigger make
-%bashcomp_trigger man
+%bashcomp_trigger man man-db,man %{_bindir}/man
 %bashcomp_trigger mc
 %bashcomp_trigger mcrypt
 %bashcomp_trigger mdadm
@@ -238,7 +238,7 @@ fi
 %bashcomp_trigger mtx
 %bashcomp_trigger munin-node
 %bashcomp_trigger mutt
-%bashcomp_trigger mysqladmin mysql,MySQL-client-community
+%bashcomp_trigger mysqladmin mysql,MySQL-client-community %{_bindir}/mysqladmin
 %bashcomp_trigger ncftp
 %bashcomp_trigger net-tools
 %bashcomp_trigger nmap
@@ -295,7 +295,7 @@ fi
 %bashcomp_trigger tcpdump
 %bashcomp_trigger unace
 %bashcomp_trigger unrar
-%bashcomp_trigger vncviewer tigervnc,vnc
+%bashcomp_trigger vncviewer tigervnc,vnc %{_bindir}/vncviewer
 %bashcomp_trigger vpnc
 %bashcomp_trigger wireless-tools
 %bashcomp_trigger wodim
@@ -359,7 +359,9 @@ fi
 %changelog
 * Wed Oct 13 2010 Ville Skyttä <ville.skytta@iki.fi>
 - Install util-linux completions unconditionally.
-- Make trigger target package rename etc tracking easier to maintain.
+- Make trigger target package rename etc tracking easier to maintain, and
+  handle man-db/man (#642193, Yanko Kaneti), mysql/MySQL-client-community,
+  and tigervnc/vnc renames better.
 
 * Tue Oct  5 2010 Ville Skyttä <ville.skytta@iki.fi> - 1:1.2-4
 - More IPv6 address completion fixes, #630658.
