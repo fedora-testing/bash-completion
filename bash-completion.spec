@@ -150,7 +150,8 @@ rm -rf $RPM_BUILD_ROOT
 [ -e %{_sysconfdir}/bash_completion.d/%1 ] ||\
     ln -s %{_datadir}/%{name}/%1 %{_sysconfdir}/bash_completion.d || :\
 %triggerun -- %{?2}%{!?2:%1}\
-[ $2 -gt 0 ] || rm -f %{_sysconfdir}/bash_completion.d/%1 || :\
+[ $2 -gt 0 ] %{?3:|| [ -x %3 ]} %{?4:|| [ -x %4 ]} %{?5:|| [ -x %5 ]} ||\
+    rm -f %{_sysconfdir}/bash_completion.d/%1 || :\
 %{nil}
 
 %bashcomp_trigger abook
@@ -254,14 +255,7 @@ fi
 %bashcomp_trigger povray
 %bashcomp_trigger procps
 %bashcomp_trigger python
-
-%triggerin -- qt,kdelibs3,kdelibs
-[ -e %{_sysconfdir}/bash_completion.d/qdbus ] || \
-    ln -s %{_datadir}/%{name}/qdbus %{_sysconfdir}/bash_completion.d || :
-%triggerpostun -- qt,kdelibs3,kdelibs
-[ $2 -gt 0 ] || [ -x %{_bindir}/dcop ] || [ -x %{_bindir}/qdbus ] || \
-    rm -f %{_sysconfdir}/bash_completion.d/qdbus || :
-
+%bashcomp_trigger qdbus qt,kdelibs3,kdelibs %{_bindir}/qdbus %{_bindir}/dcop
 %bashcomp_trigger qemu
 %bashcomp_trigger quota-tools quota
 %bashcomp_trigger rcs
@@ -365,6 +359,7 @@ fi
 %changelog
 * Wed Oct 13 2010 Ville Skyttä <ville.skytta@iki.fi>
 - Install util-linux completions unconditionally.
+- Make trigger target package rename etc tracking easier to maintain.
 
 * Tue Oct  5 2010 Ville Skyttä <ville.skytta@iki.fi> - 1:1.2-4
 - More IPv6 address completion fixes, #630658.
