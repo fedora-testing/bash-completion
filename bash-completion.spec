@@ -108,7 +108,7 @@ install -dm 755 $RPM_BUILD_ROOT%{_sysconfdir}/bash_completion.d
 # Always installed (not triggered) completions for practically always
 # installed packages or non-triggerable common ones:
 for f in bash-builtins configure coreutils dd getent iconv ifupdown \
-    module-init-tools rpm service ; do
+    module-init-tools rpm service util-linux ; do
     mv $RPM_BUILD_ROOT{%{_datadir}/%{name}/$f,%{_sysconfdir}/bash_completion.d}
 done
 
@@ -301,7 +301,6 @@ fi
 %bashcomp_trigger tcpdump
 %bashcomp_trigger unace
 %bashcomp_trigger unrar
-%bashcomp_trigger util-linux util-linux-ng,util-linux
 %bashcomp_trigger vncviewer tigervnc,vnc
 %bashcomp_trigger vpnc
 %bashcomp_trigger wireless-tools
@@ -359,10 +358,14 @@ fi
 %{_sysconfdir}/bash_completion.d/module-init-tools
 %{_sysconfdir}/bash_completion.d/rpm
 %{_sysconfdir}/bash_completion.d/service
+%{_sysconfdir}/bash_completion.d/util-linux
 %{_datadir}/%{name}/
 
 
 %changelog
+* Wed Oct 13 2010 Ville Skyttä <ville.skytta@iki.fi>
+- Install util-linux completions unconditionally.
+
 * Tue Oct  5 2010 Ville Skyttä <ville.skytta@iki.fi> - 1:1.2-4
 - More IPv6 address completion fixes, #630658.
 
