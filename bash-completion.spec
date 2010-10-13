@@ -149,10 +149,10 @@ rm -rf $RPM_BUILD_ROOT
 # is never defined)?
 %define bashcomp_trigger() \
 %triggerin -- %{?2}%{!?2:%1}\
-[ -e %{_sysconfdir}/bash_completion.d/%1 ] ||\
+[ -e %{_sysconfdir}/bash_completion.d/%1 ] || \\\
     ln -s %{_datadir}/%{name}/%1 %{_sysconfdir}/bash_completion.d || :\
 %triggerun -- %{?2}%{!?2:%1}\
-[ $2 -gt 0 ] %{?3:|| [ -x %3 ]} %{?4:|| [ -x %4 ]} %{?5:|| [ -x %5 ]} ||\
+[ $2 -gt 0 ]%{?3: || [ -x %3 ]}%{?4: || [ -x %4 ]}%{?5: || [ -x %5 ]} || \\\
     rm -f %{_sysconfdir}/bash_completion.d/%1 || :\
 %{nil}
 
