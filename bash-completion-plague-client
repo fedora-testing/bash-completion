@@ -8,7 +8,7 @@ _plague_client()
 	local cur
 
 	COMPREPLY=()
-	cur=`_get_cword`
+	_get_comp_words_by_ref cur
 
 	[ $COMP_CWORD = 1 ] && \
 		COMPREPLY=( $( compgen -W 'build detail finish help is_paused \
@@ -16,5 +16,5 @@ _plague_client()
 				update_builders' -- $cur ) )
 
 	return 0
-}
+} &&
 complete -F _plague_client plague-client

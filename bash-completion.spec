@@ -2,8 +2,8 @@
 %bcond_with tests
 
 Name:           bash-completion
-Version:        1.2
-Release:        5%{?dist}
+Version:        1.3
+Release:        1%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
 
@@ -13,14 +13,10 @@ URL:            http://bash-completion.alioth.debian.org/
 Source0:        http://bash-completion.alioth.debian.org/files/%{name}-%{version}.tar.bz2
 Source1:        %{name}-plague-client
 Source2:        CHANGES.package.old
-# From upstream post-1.2 git
-Patch0:         %{name}-1.2-init.d.patch
-# From upstream post-1.2 git, #628130
-Patch1:         %{name}-1.2-tilde-username-628130.patch
-# From upstream post-1.2 git, #630328
-Patch2:         %{name}-1.2-rpm-630328.patch
-# From upstream post-1.2 git, #630658
-Patch3:         %{name}-1.2-known_hosts-ipv6-630658.patch
+# Non-upstream: adjust helpers dir location to our modified layout
+Patch0:         %{name}-1.3-helpersdir.patch
+# From upstream post 1.3 git
+Patch1:         %{name}-1.3-gendiff.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -42,92 +38,89 @@ of the programmable completion feature of bash.
 %setup -q
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
-%patch3 -p1
-install -pm 644 %{SOURCE1} contrib/plague-client
 install -pm 644 %{SOURCE2} .
 
+
+%build
+%configure
+make %{?_smp_mflags}
+
+
+%install
+rm -rf $RPM_BUILD_ROOT %{name}-files.list
+make install DESTDIR=$RPM_BUILD_ROOT
+
+cd $RPM_BUILD_ROOT%{_sysconfdir}/bash_completion.d
+
 # Updated completions shipped upstream:
-rm contrib/cowsay
-rm contrib/_modules # environment-modules >= 3.2.7
-%if 0%{?fedora} || 0%{?rhel} > 5
-rm contrib/_mock # mock >= 1.1.1
-rm contrib/_subversion # subversion >= 1.6.5-2
-rm contrib/_yum-utils # yum-utils >= 1.1.24
-rm contrib/_yum # yum >= 3.2.25-2
-%endif
+rm cowsay
 
 # Combine to per-package files to work around #585384:
-cd contrib
 ( echo ; cat update-alternatives ) >> chkconfig
 rm update-alternatives
 ( echo ; cat sysctl ) >> procps
 rm sysctl
 ( echo ; cat chsh ; echo ; cat mount ; echo ; cat rtcwake ) >> util-linux
 rm chsh mount rtcwake
-( echo ; cat xrandr ) >> xhost
-mv xhost xorg-x11-server-utils ; rm xrandr
-cd ..
+( echo ; cat xmodmap ; echo ; cat xrandr ; echo ; cat xrdb ) >> xhost
+mv xhost xorg-x11-server-utils ; rm xmodmap xrandr xrdb
 
 # Not applicable to Fedora and derivatives:
-rm contrib/apache2ctl
-rm contrib/apt-build
-rm contrib/aptitude
-rm contrib/cardctl
-rm contrib/heimdal
-rm contrib/kldload
-rm contrib/lilo
-rm contrib/links
-rm contrib/lintian
-rm contrib/pkg_install
-rm contrib/pkgtools
-rm contrib/portupgrade
-rm contrib/reportbug
-rm contrib/sysv-rc
+rm apache2ctl
+rm apt-build
+rm aptitude
+rm cardctl
+rm heimdal
+rm kldload
+rm lilo
+rm links
+rm lintian
+rm pkg_install
+rm pkgtools
+rm portupgrade
+rm reportbug
+rm sysv-rc
 
 # Not handled due to other reasons (e.g. no known packages) (yet?):
-rm contrib/larch
-rm contrib/p4
-
-
-%build
-%configure
-make bash_completion.sh
-
-
-%install
-rm -rf $RPM_BUILD_ROOT %{name}-ghosts.list
-
-install -dm 755 $RPM_BUILD_ROOT%{_sysconfdir}/profile.d
-install -pm 644 bash_completion $RPM_BUILD_ROOT%{_sysconfdir}
-install -pm 644 bash_completion.sh $RPM_BUILD_ROOT%{_sysconfdir}/profile.d
+rm larch
+rm p4
 
 install -dm 755 $RPM_BUILD_ROOT%{_datadir}/%{name}
-install -pm 644 contrib/* $RPM_BUILD_ROOT%{_datadir}/%{name}
-
-install -dm 755 $RPM_BUILD_ROOT%{_sysconfdir}/bash_completion.d
+mv * $RPM_BUILD_ROOT%{_datadir}/%{name}
+install -pm 644 %{SOURCE1} $RPM_BUILD_ROOT%{_datadir}/%{name}/plague-client
 
 # Always installed (not triggered) completions for practically always
 # installed packages or non-triggerable common ones:
 for f in bash-builtins configure coreutils dd getent iconv ifupdown \
-    module-init-tools rpm service util-linux ; do
-    mv $RPM_BUILD_ROOT{%{_datadir}/%{name}/$f,%{_sysconfdir}/bash_completion.d}
+    module-init-tools rpm service sh util-linux ; do
+    mv $RPM_BUILD_ROOT%{_datadir}/%{name}/$f .
 done
 
-d=$(pwd)
-# ghost list
+cd - # $RPM_BUILD_ROOT%{_sysconfdir}/bash_completion.d
+
+%if 0%{?rhel} == 5
+ # mock >= 1.1.1, subversion >= 1.6.5-2, yum-utils >= 1.1.24, yum >= 3.2.25-2
+install -pm 644 completions/_{mock,subversion,yum-utils,yum} \
+    $RPM_BUILD_ROOT%{_datadir}/%{name}
+%endif
+
+# file list
+filelist=$(pwd)/%{name}-files.list
 cd $RPM_BUILD_ROOT%{_datadir}/%{name}
 for f in * ; do
+    [ $f = helpers ] && continue
     ln -s %{_datadir}/%{name}/$f $RPM_BUILD_ROOT%{_sysconfdir}/bash_completion.d
-    echo "%ghost %{_sysconfdir}/bash_completion.d/$f" >> $d/%{name}-ghosts.list
+    echo "%ghost %{_sysconfdir}/bash_completion.d/$f" >> $filelist
+    echo "%{_datadir}/%{name}/$f" >> $filelist
 done
-cd -
+cd - # $RPM_BUILD_ROOT%{_datadir}/%{name}
+
+# avoid dependency on perl (will only be invoked if perl is installed)
+chmod -x $RPM_BUILD_ROOT%{_datadir}/%{name}/helpers/perl
 
 
 %if %{with tests}
 %check
-# Should be done/fixed upstream
-mkdir test/log test/tmp
 # For some tests involving non-ASCII filenames
 export LANG=en_US.UTF-8
 # This stuff borrowed from dejagnu-1.4.4-17 (tests need a terminal)
@@ -161,6 +154,8 @@ rm -rf $RPM_BUILD_ROOT
 %bashcomp_trigger apt
 %bashcomp_trigger aptitude
 %bashcomp_trigger aspell
+%bashcomp_trigger autoconf
+%bashcomp_trigger automake
 %bashcomp_trigger autorpm
 %bashcomp_trigger bind-utils
 %bashcomp_trigger bitkeeper
@@ -174,6 +169,7 @@ rm -rf $RPM_BUILD_ROOT
 %bashcomp_trigger clisp
 %bashcomp_trigger cpan2dist perl-CPANPLUS
 %bashcomp_trigger cpio
+%bashcomp_trigger crontab cronie,vixie-cron %{_bindir}/crontab
 %bashcomp_trigger cryptsetup cryptsetup-luks
 %bashcomp_trigger cups
 %bashcomp_trigger cvs
@@ -183,8 +179,11 @@ rm -rf $RPM_BUILD_ROOT
 %bashcomp_trigger dpkg
 %bashcomp_trigger dselect
 %bashcomp_trigger dsniff
+%bashcomp_trigger dvd+rw-tools
+%bashcomp_trigger e2fsprogs
 %bashcomp_trigger findutils
 %bashcomp_trigger freeciv
+%bashcomp_trigger freerdp
 %bashcomp_trigger fuse
 %bashcomp_trigger gcc
 %bashcomp_trigger gcl
@@ -197,8 +196,10 @@ rm -rf $RPM_BUILD_ROOT
 %bashcomp_trigger gzip
 %bashcomp_trigger hping2 hping3
 %bashcomp_trigger imagemagick ImageMagick
+%bashcomp_trigger iftop
 %bashcomp_trigger info
 %bashcomp_trigger ipmitool
+%bashcomp_trigger iproute2 iproute
 %bashcomp_trigger ipsec openswan
 %bashcomp_trigger iptables
 %bashcomp_trigger ipv6calc
@@ -209,6 +210,8 @@ rm -rf $RPM_BUILD_ROOT
 %bashcomp_trigger ldapvi
 %bashcomp_trigger lftp
 %bashcomp_trigger lisp cmucl
+%bashcomp_trigger lrzip
+%bashcomp_trigger lsof
 %bashcomp_trigger lvm lvm2
 %bashcomp_trigger lzma xz-lzma-compat
 %bashcomp_trigger lzop
@@ -222,7 +225,7 @@ rm -rf $RPM_BUILD_ROOT
 %bashcomp_trigger minicom
 %bashcomp_trigger mkinitrd
 
-%if 0%{?rhel} && 0%{?rhel} < 6
+%if 0%{?rhel} == 5
 %triggerin -- mock
 if [ -e %{_sysconfdir}/bash_completion.d/mock.bash ] ; then
     # Upstream completion in mock >= 1.1.1
@@ -245,6 +248,7 @@ fi
 %bashcomp_trigger net-tools
 %bashcomp_trigger nmap
 %bashcomp_trigger ntpdate
+%bashcomp_trigger open-iscsi iscsi-initiator-utils
 %bashcomp_trigger openldap openldap-clients
 %bashcomp_trigger openssl
 %bashcomp_trigger perl
@@ -276,11 +280,12 @@ fi
 %bashcomp_trigger sitecopy
 %bashcomp_trigger smartctl smartmontools
 %bashcomp_trigger snownews
+%bashcomp_trigger sqlite3 sqlite
 %bashcomp_trigger ssh openssh-clients
 %bashcomp_trigger sshfs fuse-sshfs
 %bashcomp_trigger strace
 
-%if 0%{?rhel} && 0%{?rhel} < 6
+%if 0%{?rhel} == 5
 %triggerin -- subversion
 if [ -e %{_sysconfdir}/bash_completion.d/subversion ] ; then
     # Upstream completion in subversion >= 1.6.5-2
@@ -293,6 +298,7 @@ fi
 %endif
 
 %bashcomp_trigger svk perl-SVK
+%bashcomp_trigger sysbench
 %bashcomp_trigger tar
 %bashcomp_trigger tcpdump
 %bashcomp_trigger unace
@@ -313,7 +319,7 @@ fi
 %bashcomp_trigger xz
 %bashcomp_trigger yp-tools
 
-%if 0%{?rhel} && 0%{?rhel} < 6
+%if 0%{?rhel} == 5
 %triggerin -- yum
 if [ -e %{_sysconfdir}/bash_completion.d/yum.bash ] ; then
     # Upstream completion in yum >= 3.2.25-2
@@ -338,7 +344,7 @@ fi
 %bashcomp_trigger yum-arch
 
 
-%files -f %{name}-ghosts.list
+%files -f %{name}-files.list
 %defattr(-,root,root,-)
 %doc AUTHORS CHANGES CHANGES.package.old COPYING README TODO
 %config(noreplace) %{_sysconfdir}/profile.d/bash_completion.sh
@@ -354,11 +360,17 @@ fi
 %{_sysconfdir}/bash_completion.d/module-init-tools
 %{_sysconfdir}/bash_completion.d/rpm
 %{_sysconfdir}/bash_completion.d/service
+%{_sysconfdir}/bash_completion.d/sh
 %{_sysconfdir}/bash_completion.d/util-linux
-%{_datadir}/%{name}/
+%dir %{_datadir}/%{name}/
+%dir %{_datadir}/%{name}/helpers/
+%attr(755,root,root) %{_datadir}/%{name}/helpers/perl
 
 
 %changelog
+* Mon Feb  7 2011 Ville Skyttä <ville.skytta@iki.fi> - 1:1.3-1
+- Update to 1.3.
+
 * Wed Oct 13 2010 Ville Skyttä <ville.skytta@iki.fi> - 1:1.2-5
 - Install util-linux completions unconditionally.
 - Make trigger target package rename etc tracking easier to maintain, and
