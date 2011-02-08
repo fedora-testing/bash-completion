@@ -3,7 +3,7 @@
 
 Name:           bash-completion
 Version:        1.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
 
@@ -368,6 +368,9 @@ fi
 
 
 %changelog
+* Mon Feb 07 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:1.3-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+
 * Mon Feb  7 2011 Ville Skyttä <ville.skytta@iki.fi> - 1:1.3-1
 - Update to 1.3.
 
