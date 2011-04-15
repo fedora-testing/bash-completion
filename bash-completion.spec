@@ -3,7 +3,7 @@
 
 Name:           bash-completion
 Version:        1.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
 
@@ -15,8 +15,16 @@ Source1:        %{name}-plague-client
 Source2:        CHANGES.package.old
 # Non-upstream: adjust helpers dir location to our modified layout
 Patch0:         %{name}-1.3-helpersdir.patch
+# Non-upstream: see comments in patch
+Patch1:         %{name}-1.3-yeswehave.patch
 # From upstream post 1.3 git
-Patch1:         %{name}-1.3-gendiff.patch
+Patch2:         %{name}-1.3-gendiff.patch
+# From upstream post 1.3 git
+Patch3:         %{name}-1.3-manpager-689180.patch
+# From upstream post 1.3 git
+Patch4:         %{name}-1.3-libreoffice-692548.patch
+# From upstream post 1.3 git
+Patch5:         %{name}-1.3-latexdbj-678122.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -38,6 +46,10 @@ of the programmable completion feature of bash.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
+%patch3 -p1
+%patch4 -p1
+%patch5 -p1
 install -pm 644 %{SOURCE2} .
 
 
@@ -368,6 +380,12 @@ fi
 
 
 %changelog
+* Tue Apr 12 2011 Ville Skyttä <ville.skytta@iki.fi> - 1:1.3-3
+- Patch to not test command availability for each snippet, improves load time.
+- Apply upstream libreoffice flat XML extensions fix for #692548.
+- Apply upstream MANPAGER fix for #689180.
+- Apply upstream (la)tex *.dbj fix for #678122.
+
 * Mon Feb 07 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:1.3-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
 

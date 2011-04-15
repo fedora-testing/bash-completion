@@ -1,0 +1,16 @@
+diff -up bash-completion-1.3/bash_completion.orig bash-completion-1.3/bash_completion
+--- bash-completion-1.3/bash_completion.orig	2011-02-06 21:16:00.000000000 +0200
++++ bash-completion-1.3/bash_completion	2011-04-12 21:34:55.527355045 +0300
+@@ -171,7 +171,11 @@ have()
+     unset -v have
+     # Completions for system administrator commands are installed as well in
+     # case completion is attempted via `sudo command ...'.
+-    PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin type $1 &>/dev/null &&
++    # In this packaged setup we don't need to do the availability test below
++    # because only completions for commands that are actually available should
++    # be in /etc/bash_completion.d anyway; not doing the test improves our load
++    # time significantly.
++    #PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin type $1 &>/dev/null &&
+     have="yes"
+ }
+ 
