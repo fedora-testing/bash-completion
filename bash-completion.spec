@@ -3,7 +3,7 @@
 
 Name:           bash-completion
 Version:        1.3
-Release:        3%{?dist}
+Release:        4%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
 
@@ -13,6 +13,8 @@ URL:            http://bash-completion.alioth.debian.org/
 Source0:        http://bash-completion.alioth.debian.org/files/%{name}-%{version}.tar.bz2
 Source1:        %{name}-plague-client
 Source2:        CHANGES.package.old
+# https://bugzilla.redhat.com/677446
+Source3:        %{name}-1.3-filedir.bash
 # Non-upstream: adjust helpers dir location to our modified layout
 Patch0:         %{name}-1.3-helpersdir.patch
 # Non-upstream: see comments in patch
@@ -107,6 +109,7 @@ for f in bash-builtins configure coreutils dd getent iconv ifupdown \
     module-init-tools rpm service sh util-linux ; do
     mv $RPM_BUILD_ROOT%{_datadir}/%{name}/$f .
 done
+install -pm 644 %{SOURCE3} redefine_filedir
 
 cd - # $RPM_BUILD_ROOT%{_sysconfdir}/bash_completion.d
 
@@ -370,6 +373,7 @@ fi
 %{_sysconfdir}/bash_completion.d/iconv
 %{_sysconfdir}/bash_completion.d/ifupdown
 %{_sysconfdir}/bash_completion.d/module-init-tools
+%{_sysconfdir}/bash_completion.d/redefine_filedir
 %{_sysconfdir}/bash_completion.d/rpm
 %{_sysconfdir}/bash_completion.d/service
 %{_sysconfdir}/bash_completion.d/sh
@@ -380,6 +384,9 @@ fi
 
 
 %changelog
+* Tue May 10 2011 Ville Skyttä <ville.skytta@iki.fi> - 1:1.3-4
+- Work around problems caused by Adobe Reader overriding _filedir (#677446).
+
 * Tue Apr 12 2011 Ville Skyttä <ville.skytta@iki.fi> - 1:1.3-3
 - Patch to not test command availability for each snippet, improves load time.
 - Apply upstream libreoffice flat XML extensions fix for #692548.
