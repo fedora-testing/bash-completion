@@ -3,7 +3,7 @@
 
 Name:           bash-completion
 Version:        1.3
-Release:        4%{?dist}
+Release:        5%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
 
@@ -19,14 +19,20 @@ Source3:        %{name}-1.3-filedir.bash
 Patch0:         %{name}-1.3-helpersdir.patch
 # Non-upstream: see comments in patch
 Patch1:         %{name}-1.3-yeswehave.patch
-# From upstream post 1.3 git
+# http://anonscm.debian.org/gitweb/?p=bash-completion/bash-completion.git;a=commitdiff;h=d066ace
 Patch2:         %{name}-1.3-gendiff.patch
-# From upstream post 1.3 git
+# http://anonscm.debian.org/gitweb/?p=bash-completion/bash-completion.git;a=commitdiff;h=f1b9580
 Patch3:         %{name}-1.3-manpager-689180.patch
-# From upstream post 1.3 git
+# http://anonscm.debian.org/gitweb/?p=bash-completion/bash-completion.git;a=commitdiff;h=e10848b
 Patch4:         %{name}-1.3-libreoffice-692548.patch
-# From upstream post 1.3 git
+# http://anonscm.debian.org/gitweb/?p=bash-completion/bash-completion.git;a=commitdiff;h=2eb713f
 Patch5:         %{name}-1.3-latexdbj-678122.patch
+# http://anonscm.debian.org/gitweb/?p=bash-completion/bash-completion.git;a=commitdiff;h=75309e9
+Patch6:         %{name}-1.3-xspec-726220.patch
+# http://anonscm.debian.org/gitweb/?p=bash-completion/bash-completion.git;a=commitdiff;h=d74e169
+Patch7:         %{name}-1.3-selfparse-479936.patch
+# http://anonscm.debian.org/gitweb/?p=bash-completion/bash-completion.git;a=commitdiff;h=e7b3abf
+Patch8:         %{name}-1.3-sum-717341.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -35,7 +41,12 @@ BuildRequires:  dejagnu
 BuildRequires:  screen
 BuildRequires:  tcllib
 %endif
+%if 0%{?fedora} || 0%{?rhel} > 5
+# For Patch7
+Requires:       bash >= 4
+%else
 Requires:       bash >= 3.2
+%endif
 # For symlinking in triggers, #490768
 Requires:       coreutils
 
@@ -52,6 +63,12 @@ of the programmable completion feature of bash.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
+%if 0%{?fedora} || 0%{?rhel} > 5
+# bash >= 4 only
+%patch7 -p1
+%endif
+%patch8 -p1
 install -pm 644 %{SOURCE2} .
 
 
@@ -156,9 +173,17 @@ rm -rf $RPM_BUILD_ROOT
 # conditional is apparently evaluated too early (at spec parse time when arg 2
 # is never defined)?
 %define bashcomp_trigger() \
+%if 0%{?fedora} || 0%{?rhel} > 5\
+%triggerin -p <lua> -- %{?2}%{!?2:%1}\
+if not posix.access("%{_sysconfdir}/bash_completion.d/%1") then\
+    posix.symlink("%{_datadir}/%{name}/%1",\
+                  "%{_sysconfdir}/bash_completion.d/%1")\
+end\
+%else\
 %triggerin -- %{?2}%{!?2:%1}\
 [ -e %{_sysconfdir}/bash_completion.d/%1 ] || \\\
     ln -s %{_datadir}/%{name}/%1 %{_sysconfdir}/bash_completion.d || :\
+%endif\
 %triggerun -- %{?2}%{!?2:%1}\
 [ $2 -gt 0 ]%{?3: || [ -x %3 ]}%{?4: || [ -x %4 ]}%{?5: || [ -x %5 ]} || \\\
     rm -f %{_sysconfdir}/bash_completion.d/%1 || :\
@@ -384,6 +409,13 @@ fi
 
 
 %changelog
+* Mon Aug 15 2011 Ville Skyttä <ville.skytta@iki.fi> - 1:1.3-5
+- Fix ant completion when complete-ant-cmd.pl is N/A (#729771).
+- Fix bash < 4 _filedir_xspec uppercase expansion issue (#726220).
+- Drop _filedir_xspec self-parsing with bash >= 4 for speedups (#479936).
+- Do install triggers with lua where available to speed up package install.
+- Add completion for sum (#717341).
+
 * Tue May 10 2011 Ville Skyttä <ville.skytta@iki.fi> - 1:1.3-4
 - Work around problems caused by Adobe Reader overriding _filedir (#677446).
 
