@@ -3,7 +3,7 @@
 
 Name:           bash-completion
 Version:        1.3
-Release:        5%{?dist}
+Release:        6%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
 
@@ -33,6 +33,8 @@ Patch6:         %{name}-1.3-xspec-726220.patch
 Patch7:         %{name}-1.3-selfparse-479936.patch
 # http://anonscm.debian.org/gitweb/?p=bash-completion/bash-completion.git;a=commitdiff;h=e7b3abf
 Patch8:         %{name}-1.3-sum-717341.patch
+# http://anonscm.debian.org/gitweb/?p=bash-completion/bash-completion.git;a=commitdiff;h=525d6e7
+Patch9:         bash-completion-1.3-profile-hook.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -69,6 +71,7 @@ of the programmable completion feature of bash.
 %patch7 -p1
 %endif
 %patch8 -p1
+%patch9 -p1
 install -pm 644 %{SOURCE2} .
 
 
@@ -409,6 +412,10 @@ fi
 
 
 %changelog
+* Mon Sep  5 2011 Ville Skyttä <ville.skytta@iki.fi> - 1:1.3-6
+- Apply upstream patch providing a config and profile hook to make it
+  easier to disable bash-completion on per user basis.
+
 * Mon Aug 15 2011 Ville Skyttä <ville.skytta@iki.fi> - 1:1.3-5
 - Fix ant completion when complete-ant-cmd.pl is N/A (#729771).
 - Fix bash < 4 _filedir_xspec uppercase expansion issue (#726220).
