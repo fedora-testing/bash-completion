@@ -41,7 +41,9 @@ _filedir()
         -n "$1" && "$1" != -d && ${#toks[@]} -lt 1 ]] && \
         toks+=( $( compgen -f -- $quoted ) )
 
-    [ ${#toks[@]} -ne 0 ] && compopt -o filenames 2>/dev/null
-
-    COMPREPLY+=( "${toks[@]}" )
+    if [[ ${#toks[@]} -ne 0 ]]; then
+        # 2>/dev/null for direct invocation, e.g. in the _filedir unit test
+        compopt -o filenames 2>/dev/null
+        COMPREPLY+=( "${toks[@]}" )
+    fi
 } # _filedir()

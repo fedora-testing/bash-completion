@@ -2,7 +2,7 @@
 %bcond_with tests
 
 Name:           bash-completion
-Version:        1.90
+Version:        1.99
 Release:        1%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
@@ -10,13 +10,11 @@ Summary:        Programmable completion for Bash
 License:        GPLv2+
 URL:            http://bash-completion.alioth.debian.org/
 Source0:        http://bash-completion.alioth.debian.org/files/%{name}-%{version}.tar.bz2
-# In upstream post-1.90 git:
-Source1:        %{name}-plague-client
 Source2:        CHANGES.package.old
 # https://bugzilla.redhat.com/677446, see also noblacklist patch
-Source3:        %{name}-1.90-redefine_filedir.bash
+Source3:        %{name}-1.99-redefine_filedir.bash
 # https://bugzilla.redhat.com/677446, see also filedir source
-Patch0:         %{name}-1.90-noblacklist.patch
+Patch0:         %{name}-1.99-noblacklist.patch
 
 BuildArch:      noarch
 %if %{with tests}
@@ -44,18 +42,12 @@ make %{?_smp_mflags}
 
 %install
 make install DESTDIR=$RPM_BUILD_ROOT
-install -pm 644 %{SOURCE1} \
-    $RPM_BUILD_ROOT%{_datadir}/bash-completion/completions/plague-client
 
 # Updated completion shipped in cowsay package:
 rm $RPM_BUILD_ROOT%{_datadir}/bash-completion/completions/{cowsay,cowthink}
 
 install -Dpm 644 %{SOURCE3} \
     $RPM_BUILD_ROOT%{_sysconfdir}/bash_completion.d/redefine_filedir
-
-# Fixed in upstream post-1.90 git:
-chmod -c 644 $RPM_BUILD_ROOT%{_datadir}/bash-completion/bash_completion
-install -dm 755 $RPM_BUILD_ROOT%{_sysconfdir}/bash_completion.d
 
 
 %if %{with tests}
@@ -82,6 +74,9 @@ exit $result
 
 
 %changelog
+* Sun Jan  8 2012 Ville Skyttä <ville.skytta@iki.fi> - 1:1.99-1
+- Update to 1.99.
+
 * Fri Nov  4 2011 Ville Skyttä <ville.skytta@iki.fi> - 1:1.90-1
 - Update to 1.90.
 - Specfile cleanups.
