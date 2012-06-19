@@ -1,8 +1,10 @@
 # Expected failures in mock, hangs in koji
 %bcond_with tests
+# The *.py files we ship are not python scripts, #813651
+%global _python_bytecompile_errors_terminate_build 0
 
 Name:           bash-completion
-Version:        1.99
+Version:        2.0
 Release:        1%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
@@ -12,8 +14,8 @@ URL:            http://bash-completion.alioth.debian.org/
 Source0:        http://bash-completion.alioth.debian.org/files/%{name}-%{version}.tar.bz2
 Source2:        CHANGES.package.old
 # https://bugzilla.redhat.com/677446, see also noblacklist patch
-Source3:        %{name}-1.99-redefine_filedir.bash
-# https://bugzilla.redhat.com/677446, see also filedir source
+Source3:        %{name}-2.0-redefine_filedir.bash
+# https://bugzilla.redhat.com/677446, see also redefine_filedir source
 Patch0:         %{name}-1.99-noblacklist.patch
 
 BuildArch:      noarch
@@ -74,6 +76,10 @@ exit $result
 
 
 %changelog
+* Tue Jun 19 2012 Ville Skyttä <ville.skytta@iki.fi> - 1:2.0-1
+- Update to 2.0 (fixes #817902, #831835).
+- Don't try to python-bytecompile our non-python *.py (#813651).
+
 * Sun Jan  8 2012 Ville Skyttä <ville.skytta@iki.fi> - 1:1.99-1
 - Update to 1.99.
 
