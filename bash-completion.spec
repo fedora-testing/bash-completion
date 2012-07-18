@@ -5,7 +5,7 @@
 
 Name:           bash-completion
 Version:        2.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
 
@@ -76,6 +76,9 @@ exit $result
 
 
 %changelog
+* Wed Jul 18 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:2.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
 * Tue Jun 19 2012 Ville Skyttä <ville.skytta@iki.fi> - 1:2.0-1
 - Update to 2.0 (fixes #817902, #831835).
 - Don't try to python-bytecompile our non-python *.py (#813651).
