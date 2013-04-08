@@ -4,8 +4,8 @@
 %global _python_bytecompile_errors_terminate_build 0
 
 Name:           bash-completion
-Version:        2.0
-Release:        3%{?dist}
+Version:        2.1
+Release:        1%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
 
@@ -17,6 +17,8 @@ Source2:        CHANGES.package.old
 Source3:        %{name}-2.0-redefine_filedir.bash
 # https://bugzilla.redhat.com/677446, see also redefine_filedir source
 Patch0:         %{name}-1.99-noblacklist.patch
+# Commands included in util-linux >= 2.23-rc2
+Patch1:         %{name}-2.1-util-linux-223.patch
 
 BuildArch:      noarch
 %if %{with tests}
@@ -34,6 +36,9 @@ of the programmable completion feature of bash.
 %prep
 %setup -q
 %patch0 -p1
+%if 0%{?fedora} >= 19
+%patch1 -p1
+%endif
 install -pm 644 %{SOURCE2} .
 
 
@@ -47,6 +52,11 @@ make install DESTDIR=$RPM_BUILD_ROOT
 
 # Updated completion shipped in cowsay package:
 rm $RPM_BUILD_ROOT%{_datadir}/bash-completion/completions/{cowsay,cowthink}
+%if 0%{?fedora} < 18
+# systemd >= 198 ships this one:
+install -pm 644 completions/_udevadm \
+    $RPM_BUILD_ROOT%{_datadir}/bash-completion/completions/udevadm
+%endif
 
 install -Dpm 644 %{SOURCE3} \
     $RPM_BUILD_ROOT%{_sysconfdir}/bash_completion.d/redefine_filedir
@@ -76,6 +86,10 @@ exit $result
 
 
 %changelog
+* Mon Apr  8 2013 Ville Skyttä <ville.skytta@iki.fi> - 1:2.1-1
+- Update to 2.1 (fixes #860510, #906469, #912113, #919246, #928253).
+- Don't ship completions included in util-linux 2.23-rc2 for F-19+.
+
 * Wed Feb 13 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:2.0-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
 
