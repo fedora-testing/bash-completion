@@ -52,7 +52,7 @@ make install DESTDIR=$RPM_BUILD_ROOT
 
 # Updated completion shipped in cowsay package:
 rm $RPM_BUILD_ROOT%{_datadir}/bash-completion/completions/{cowsay,cowthink}
-%if 0%{?fedora} < 18
+%if 0%{?fedora} < 19
 # systemd >= 198 ships this one:
 install -pm 644 completions/_udevadm \
     $RPM_BUILD_ROOT%{_datadir}/bash-completion/completions/udevadm
