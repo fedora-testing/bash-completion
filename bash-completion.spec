@@ -5,7 +5,7 @@
 
 Name:           bash-completion
 Version:        2.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
 
@@ -57,6 +57,10 @@ rm $RPM_BUILD_ROOT%{_datadir}/bash-completion/completions/{cowsay,cowthink}
 install -pm 644 completions/_udevadm \
     $RPM_BUILD_ROOT%{_datadir}/bash-completion/completions/udevadm
 %endif
+%if 0%{?fedora} > 17
+# NetworkManager >= 0.9.8.0 ships this one:
+rm $RPM_BUILD_ROOT%{_datadir}/bash-completion/completions/nmcli
+%endif
 
 install -Dpm 644 %{SOURCE3} \
     $RPM_BUILD_ROOT%{_sysconfdir}/bash_completion.d/redefine_filedir
@@ -86,6 +90,9 @@ exit $result
 
 
 %changelog
+* Tue Apr  9 2013 Ville Skyttä <ville.skytta@iki.fi> - 1:2.1-2
+- Don't install nmcli completion on F-18+ (#950071).
+
 * Mon Apr  8 2013 Ville Skyttä <ville.skytta@iki.fi> - 1:2.1-1
 - Update to 2.1 (fixes #860510, #906469, #912113, #919246, #928253).
 - Don't ship completions included in util-linux 2.23-rc2 for F-19+.
