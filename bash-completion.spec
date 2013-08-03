@@ -5,7 +5,7 @@
 
 Name:           bash-completion
 Version:        2.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
 
@@ -90,6 +90,9 @@ exit $result
 
 
 %changelog
+* Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:2.1-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
+
 * Tue Apr  9 2013 Ville Skyttä <ville.skytta@iki.fi> - 1:2.1-2
 - Don't install nmcli completion on F-18+ (#950071).
 
