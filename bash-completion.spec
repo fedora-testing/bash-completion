@@ -5,7 +5,7 @@
 
 Name:           bash-completion
 Version:        2.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
 
@@ -81,15 +81,18 @@ exit $result
 
 
 %files
-%doc AUTHORS CHANGES CHANGES.package.old COPYING README
-# Temporarily not noreplace for < 1.90 to 1.90+ updates (changed location)
-%config %{_sysconfdir}/profile.d/bash_completion.sh
+%doc AUTHORS CHANGES CHANGES.package.old COPYING README doc/bash_completion.txt
+%config(noreplace) %{_sysconfdir}/profile.d/bash_completion.sh
 %{_sysconfdir}/bash_completion.d/
 %{_datadir}/bash-completion/
 %{_datadir}/pkgconfig/bash-completion.pc
 
 
 %changelog
+* Tue Dec 17 2013 Ville Skyttä <ville.skytta@iki.fi> - 1:2.1-4
+- Ship bash_completion.txt.
+- Make profile.d scriptlet noreplace again.
+
 * Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:2.1-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
