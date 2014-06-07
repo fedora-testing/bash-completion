@@ -5,7 +5,7 @@
 
 Name:           bash-completion
 Version:        2.1
-Release:        4%{?dist}
+Release:        5%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
 
@@ -89,6 +89,9 @@ exit $result
 
 
 %changelog
+* Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:2.1-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
+
 * Tue Dec 17 2013 Ville Skyttä <ville.skytta@iki.fi> - 1:2.1-4
 - Ship bash_completion.txt.
 - Make profile.d scriptlet noreplace again.
