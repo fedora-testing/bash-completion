@@ -5,7 +5,7 @@
 
 Name:           bash-completion
 Version:        2.1
-Release:        5%{?dist}
+Release:        6.20141110git52d8316%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
 
@@ -17,8 +17,8 @@ Source2:        CHANGES.package.old
 Source3:        %{name}-2.0-redefine_filedir.bash
 # https://bugzilla.redhat.com/677446, see also redefine_filedir source
 Patch0:         %{name}-1.99-noblacklist.patch
-# Commands included in util-linux >= 2.23-rc2
-Patch1:         %{name}-2.1-util-linux-223.patch
+# git diff 2.1..52d8316, removed .gitignore and runLint changes
+Patch1:         bash-completion-2.1+git52d8316.patch.xz
 
 BuildArch:      noarch
 %if %{with tests}
@@ -26,6 +26,8 @@ BuildRequires:  dejagnu
 BuildRequires:  screen
 BuildRequires:  tcllib
 %endif
+# For Patch1
+BuildRequires:  automake
 Requires:       bash >= 4.1
 
 %description
@@ -36,10 +38,9 @@ of the programmable completion feature of bash.
 %prep
 %setup -q
 %patch0 -p1
-%if 0%{?fedora} >= 19
 %patch1 -p1
-%endif
 install -pm 644 %{SOURCE2} .
+autoreconf # for patch1
 
 
 %build
@@ -49,18 +50,12 @@ make %{?_smp_mflags}
 
 %install
 make install DESTDIR=$RPM_BUILD_ROOT
+# http://anonscm.debian.org/cgit/bash-completion/bash-completion.git/commit/?id=ed07b18
+install -pm 644 completions/lz4 \
+    $RPM_BUILD_ROOT%{_datadir}/bash-completion/completions
 
 # Updated completion shipped in cowsay package:
 rm $RPM_BUILD_ROOT%{_datadir}/bash-completion/completions/{cowsay,cowthink}
-%if 0%{?fedora} < 19
-# systemd >= 198 ships this one:
-install -pm 644 completions/_udevadm \
-    $RPM_BUILD_ROOT%{_datadir}/bash-completion/completions/udevadm
-%endif
-%if 0%{?fedora} > 17
-# NetworkManager >= 0.9.8.0 ships this one:
-rm $RPM_BUILD_ROOT%{_datadir}/bash-completion/completions/nmcli
-%endif
 
 install -Dpm 644 %{SOURCE3} \
     $RPM_BUILD_ROOT%{_sysconfdir}/bash_completion.d/redefine_filedir
@@ -81,14 +76,23 @@ exit $result
 
 
 %files
-%doc AUTHORS CHANGES CHANGES.package.old COPYING README doc/bash_completion.txt
+%{!?_licensedir:%global license %%doc}
+%license COPYING
+%doc AUTHORS CHANGES CHANGES.package.old README doc/bash_completion.txt
 %config(noreplace) %{_sysconfdir}/profile.d/bash_completion.sh
 %{_sysconfdir}/bash_completion.d/
 %{_datadir}/bash-completion/
+%{_datadir}/cmake/
 %{_datadir}/pkgconfig/bash-completion.pc
 
 
 %changelog
+* Mon Nov 10 2014 Ville Skyttä <ville.skytta@iki.fi> - 1:2.1-6.20141110git52d8316
+- Update to current upstream git (fixes #744406, #949479, #1090481, #1015935,
+  #1132959, #1135489)
+- Clean up no longer needed specfile conditionals
+- Mark COPYING as %%license where applicable
+
 * Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:2.1-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 
