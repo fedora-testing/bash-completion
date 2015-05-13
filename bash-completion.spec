@@ -5,7 +5,7 @@
 
 Name:           bash-completion
 Version:        2.1
-Release:        6.20141110git52d8316%{?dist}
+Release:        6.20150513git1950590%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
 
@@ -17,8 +17,8 @@ Source2:        CHANGES.package.old
 Source3:        %{name}-2.0-redefine_filedir.bash
 # https://bugzilla.redhat.com/677446, see also redefine_filedir source
 Patch0:         %{name}-1.99-noblacklist.patch
-# git diff 2.1..52d8316, removed .gitignore and runLint changes
-Patch1:         bash-completion-2.1+git52d8316.patch.xz
+# range=2.1..1950590 ; git diff $range | filterdiff -x "*/.gitignore" -x "*/runLint" --clean | xz > bash-completion-$range.patch.xz
+Patch1:         %{name}-2.1..1950590.patch.xz
 
 BuildArch:      noarch
 %if %{with tests}
@@ -87,6 +87,10 @@ exit $result
 
 
 %changelog
+* Wed May 13 2015 Ville Skyttä <ville.skytta@iki.fi> - 1:2.1-6.20150513git1950590
+- Update to current upstream git (fixes #1171396)
+- Move pre-1.90 %%changelog entries to CHANGES.package.old
+
 * Mon Nov 10 2014 Ville Skyttä <ville.skytta@iki.fi> - 1:2.1-6.20141110git52d8316
 - Update to current upstream git (fixes #744406, #949479, #1090481, #1015935,
   #1132959, #1135489)
@@ -127,53 +131,3 @@ exit $result
 - Update to 1.90.
 - Specfile cleanups.
 - Move pre-1.2 %%changelog entries to CHANGES.package.old.
-
-* Mon Sep  5 2011 Ville Skyttä <ville.skytta@iki.fi> - 1:1.3-6
-- Apply upstream patch providing a config and profile hook to make it
-  easier to disable bash-completion on per user basis.
-
-* Mon Aug 15 2011 Ville Skyttä <ville.skytta@iki.fi> - 1:1.3-5
-- Fix ant completion when complete-ant-cmd.pl is N/A (#729771).
-- Fix bash < 4 _filedir_xspec uppercase expansion issue (#726220).
-- Drop _filedir_xspec self-parsing with bash >= 4 for speedups (#479936).
-- Do install triggers with lua where available to speed up package install.
-- Add completion for sum (#717341).
-
-* Tue May 10 2011 Ville Skyttä <ville.skytta@iki.fi> - 1:1.3-4
-- Work around problems caused by Adobe Reader overriding _filedir (#677446).
-
-* Tue Apr 12 2011 Ville Skyttä <ville.skytta@iki.fi> - 1:1.3-3
-- Patch to not test command availability for each snippet, improves load time.
-- Apply upstream libreoffice flat XML extensions fix for #692548.
-- Apply upstream MANPAGER fix for #689180.
-- Apply upstream (la)tex *.dbj fix for #678122.
-
-* Mon Feb 07 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:1.3-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
-
-* Mon Feb  7 2011 Ville Skyttä <ville.skytta@iki.fi> - 1:1.3-1
-- Update to 1.3.
-
-* Wed Oct 13 2010 Ville Skyttä <ville.skytta@iki.fi> - 1:1.2-5
-- Install util-linux completions unconditionally.
-- Make trigger target package rename etc tracking easier to maintain, and
-  handle man-db/man (#642193, Yanko Kaneti), mysql/MySQL-client-community,
-  and tigervnc/vnc renames better.
-- Move pre-1.0 %%changelog entries to CHANGES.package.old.
-
-* Tue Oct  5 2010 Ville Skyttä <ville.skytta@iki.fi> - 1:1.2-4
-- More IPv6 address completion fixes, #630658.
-
-* Tue Sep 28 2010 Ville Skyttä <ville.skytta@iki.fi> - 1:1.2-3
-- Apply upstream ~username completion fix for #628130.
-- Apply upstream rpm completion improvements for #630328.
-- Apply upstream IPv6 address completion fix for #630658.
-- Drop some completions that are included in respective upstream packages.
-- Fix qdbus/dcop uninstall trigger.
-
-* Mon Jun 28 2010 Ville Skyttä <ville.skytta@iki.fi> - 1:1.2-2
-- Apply upstream post 1.2 /etc/init.d/* completion improvements to fix #608351.
-
-* Wed Jun 16 2010 Ville Skyttä <ville.skytta@iki.fi> - 1:1.2-1
-- Update to 1.2, all patches applied upstream.
-- Fixes #444469, #538433, #541423, and #601813, works around #585384.
