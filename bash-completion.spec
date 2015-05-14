@@ -5,7 +5,7 @@
 
 Name:           bash-completion
 Version:        2.1
-Release:        6.20150513git1950590%{?dist}
+Release:        7.20150513git1950590%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
 
@@ -13,9 +13,7 @@ License:        GPLv2+
 URL:            http://bash-completion.alioth.debian.org/
 Source0:        http://bash-completion.alioth.debian.org/files/%{name}-%{version}.tar.bz2
 Source2:        CHANGES.package.old
-# https://bugzilla.redhat.com/677446, see also noblacklist patch
-Source3:        %{name}-2.0-redefine_filedir.bash
-# https://bugzilla.redhat.com/677446, see also redefine_filedir source
+# https://bugzilla.redhat.com/677446, see also redefine_filedir comments
 Patch0:         %{name}-1.99-noblacklist.patch
 # range=2.1..1950590 ; git diff $range | filterdiff -x "*/.gitignore" -x "*/runLint" --clean | xz > bash-completion-$range.patch.xz
 Patch1:         %{name}-2.1..1950590.patch.xz
@@ -47,18 +45,26 @@ autoreconf # for patch1
 %configure
 make %{?_smp_mflags}
 
+cat <<EOF >redefine_filedir
+# This is a copy of the _filedir function in bash_completion, included
+# and (re)defined separately here because some versions of Adobe
+# Reader, if installed, are known to override this function with an
+# incompatible version, causing various problems.
+#
+# https://bugzilla.redhat.com/677446
+# http://forums.adobe.com/thread/745833
+
+EOF
+sed -ne '/^_filedir\s*(/,/^}/p' bash_completion >>redefine_filedir
+
 
 %install
 make install DESTDIR=$RPM_BUILD_ROOT
-# http://anonscm.debian.org/cgit/bash-completion/bash-completion.git/commit/?id=ed07b18
-install -pm 644 completions/lz4 \
-    $RPM_BUILD_ROOT%{_datadir}/bash-completion/completions
+install -Dpm 644 redefine_filedir \
+    $RPM_BUILD_ROOT%{_sysconfdir}/bash_completion.d/redefine_filedir
 
 # Updated completion shipped in cowsay package:
 rm $RPM_BUILD_ROOT%{_datadir}/bash-completion/completions/{cowsay,cowthink}
-
-install -Dpm 644 %{SOURCE3} \
-    $RPM_BUILD_ROOT%{_sysconfdir}/bash_completion.d/redefine_filedir
 
 
 %if %{with tests}
@@ -87,6 +93,9 @@ exit $result
 
 
 %changelog
+* Thu May 14 2015 Ville Skyttä <ville.skytta@iki.fi> - 1:2.1-7.20150513git1950590
+- Autogenerate redefine_filedir (fixes #1171396 in it too)
+
 * Wed May 13 2015 Ville Skyttä <ville.skytta@iki.fi> - 1:2.1-6.20150513git1950590
 - Update to current upstream git (fixes #1171396)
 - Move pre-1.90 %%changelog entries to CHANGES.package.old
