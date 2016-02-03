@@ -5,7 +5,7 @@
 
 Name:           bash-completion
 Version:        2.1
-Release:        8.20150513git1950590%{?dist}
+Release:        9.20150513git1950590%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
 
@@ -93,6 +93,9 @@ exit $result
 
 
 %changelog
+* Wed Feb 03 2016 Fedora Release Engineering <releng@fedoraproject.org> - 1:2.1-9.20150513git1950590
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
+
 * Wed Jun 17 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:2.1-8.20150513git1950590
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
 
