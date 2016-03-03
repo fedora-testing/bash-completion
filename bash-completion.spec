@@ -4,19 +4,17 @@
 %global _python_bytecompile_errors_terminate_build 0
 
 Name:           bash-completion
-Version:        2.1
-Release:        9.20150513git1950590%{?dist}
+Version:        2.2
+Release:        1%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
 
 License:        GPLv2+
-URL:            http://bash-completion.alioth.debian.org/
-Source0:        http://bash-completion.alioth.debian.org/files/%{name}-%{version}.tar.bz2
+URL:            https://github.com/scop/bash-completion
+Source0:        https://github.com/scop/bash-completion/releases/download/%{version}/%{name}-%{version}.tar.xz
 Source2:        CHANGES.package.old
 # https://bugzilla.redhat.com/677446, see also redefine_filedir comments
 Patch0:         %{name}-1.99-noblacklist.patch
-# range=2.1..1950590 ; git diff $range | filterdiff -x "*/.gitignore" -x "*/runLint" --clean | xz > bash-completion-$range.patch.xz
-Patch1:         %{name}-2.1..1950590.patch.xz
 
 BuildArch:      noarch
 %if %{with tests}
@@ -24,8 +22,6 @@ BuildRequires:  dejagnu
 BuildRequires:  screen
 BuildRequires:  tcllib
 %endif
-# For Patch1
-BuildRequires:  automake
 Requires:       bash >= 4.1
 
 %description
@@ -36,9 +32,7 @@ of the programmable completion feature of bash.
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
 install -pm 644 %{SOURCE2} .
-autoreconf # for patch1
 
 
 %build
@@ -84,7 +78,8 @@ exit $result
 %files
 %{!?_licensedir:%global license %%doc}
 %license COPYING
-%doc AUTHORS CHANGES CHANGES.package.old README doc/bash_completion.txt
+%doc AUTHORS CHANGES CHANGES.package.old CONTRIBUTING.md README.md
+%doc doc/bash_completion.txt
 %config(noreplace) %{_sysconfdir}/profile.d/bash_completion.sh
 %{_sysconfdir}/bash_completion.d/
 %{_datadir}/bash-completion/
@@ -93,6 +88,9 @@ exit $result
 
 
 %changelog
+* Thu Mar  3 2016 Ville Skyttä <ville.skytta@iki.fi> - 1:2.2-1
+- Update to 2.2
+
 * Wed Feb 03 2016 Fedora Release Engineering <releng@fedoraproject.org> - 1:2.1-9.20150513git1950590
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
