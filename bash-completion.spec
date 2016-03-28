@@ -4,7 +4,7 @@
 %global _python_bytecompile_errors_terminate_build 0
 
 Name:           bash-completion
-Version:        2.2
+Version:        2.3
 Release:        1%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
@@ -88,6 +88,9 @@ exit $result
 
 
 %changelog
+* Mon Mar 28 2016 Ville Skyttä <ville.skytta@iki.fi> - 1:2.3-1
+- Update to 2.3
+
 * Thu Mar  3 2016 Ville Skyttä <ville.skytta@iki.fi> - 1:2.2-1
 - Update to 2.2
 
