@@ -37,7 +37,7 @@ install -pm 644 %{SOURCE2} .
 
 %build
 %configure
-make %{?_smp_mflags}
+%make_build
 
 cat <<EOF >redefine_filedir
 # This is a copy of the _filedir function in bash_completion, included
@@ -53,7 +53,7 @@ sed -ne '/^_filedir\s*(/,/^}/p' bash_completion >>redefine_filedir
 
 
 %install
-make install DESTDIR=$RPM_BUILD_ROOT
+%make_install
 install -Dpm 644 redefine_filedir \
     $RPM_BUILD_ROOT%{_sysconfdir}/bash_completion.d/redefine_filedir
 
@@ -78,7 +78,6 @@ make -C completions check
 
 
 %files
-%{!?_licensedir:%global license %%doc}
 %license COPYING
 %doc AUTHORS CHANGES CHANGES.package.old CONTRIBUTING.md README.md
 %doc doc/bash_completion.txt
