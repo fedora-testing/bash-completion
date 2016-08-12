@@ -61,10 +61,10 @@ install -Dpm 644 redefine_filedir \
 rm $RPM_BUILD_ROOT%{_datadir}/bash-completion/completions/{cowsay,cowthink}
 
 
-%if %{with tests}
 %check
 # For some tests involving non-ASCII filenames
 export LANG=en_US.UTF-8
+%if %{with tests}
 # This stuff borrowed from dejagnu-1.4.4-17 (tests need a terminal)
 tmpfile=$(mktemp)
 screen -D -m sh -c '( make check ; echo $? ) >'$tmpfile
@@ -72,6 +72,8 @@ cat $tmpfile
 result=$(tail -n 1 $tmpfile)
 rm -f $tmpfile
 exit $result
+%else
+make -C completions check
 %endif
 
 
