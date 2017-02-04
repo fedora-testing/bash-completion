@@ -12,7 +12,6 @@ Summary:        Programmable completion for Bash
 License:        GPLv2+
 URL:            https://github.com/scop/bash-completion
 Source0:        https://github.com/scop/bash-completion/releases/download/%{version}/%{name}-%{version}.tar.xz
-Source2:        CHANGES.package.old
 # https://bugzilla.redhat.com/677446, see also redefine_filedir comments
 Patch0:         %{name}-1.99-noblacklist.patch
 
@@ -32,7 +31,6 @@ of the programmable completion feature of bash.
 %prep
 %setup -q
 %patch0 -p1
-install -pm 644 %{SOURCE2} .
 
 
 %build
@@ -79,7 +77,7 @@ make -C completions check
 
 %files
 %license COPYING
-%doc AUTHORS CHANGES CHANGES.package.old CONTRIBUTING.md README.md
+%doc AUTHORS CHANGES CONTRIBUTING.md README.md
 %doc doc/bash_completion.txt
 %config(noreplace) %{_sysconfdir}/profile.d/bash_completion.sh
 %{_sysconfdir}/bash_completion.d/
