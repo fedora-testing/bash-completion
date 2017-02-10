@@ -5,7 +5,7 @@
 
 Name:           bash-completion
 Version:        2.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
 
@@ -87,6 +87,9 @@ make -C completions check
 
 
 %changelog
+* Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1:2.5-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
+
 * Sat Feb  4 2017 Ville Skyttä <ville.skytta@iki.fi> - 1:2.5-1
 - Update to 2.5
 
