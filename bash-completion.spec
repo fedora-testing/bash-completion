@@ -4,8 +4,8 @@
 %global _python_bytecompile_errors_terminate_build 0
 
 Name:           bash-completion
-Version:        2.5
-Release:        2%{?dist}
+Version:        2.6
+Release:        1%{?dist}
 Epoch:          1
 Summary:        Programmable completion for Bash
 
@@ -87,6 +87,9 @@ make -C completions check
 
 
 %changelog
+* Tue Jun 27 2017 Ville Skyttä <ville.skytta@iki.fi> - 1:2.6-1
+- Update to 2.6
+
 * Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1:2.5-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
 
