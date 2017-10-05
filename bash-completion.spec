@@ -29,9 +29,7 @@ of the programmable completion feature of bash.
 
 
 %prep
-%setup -q
-%patch0 -p1
-
+%autosetup -p1
 
 %build
 %configure
