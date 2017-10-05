@@ -27,7 +27,6 @@ Requires:       bash >= 4.1
 bash-completion is a collection of shell functions that take advantage
 of the programmable completion feature of bash.
 
-
 %prep
 %autosetup -p1
 
@@ -51,10 +50,10 @@ sed -ne '/^_filedir\s*(/,/^}/p' bash_completion >>redefine_filedir
 %install
 %make_install
 install -Dpm 644 redefine_filedir \
-    $RPM_BUILD_ROOT%{_sysconfdir}/bash_completion.d/redefine_filedir
+    %{buildroot}%{_sysconfdir}/bash_completion.d/redefine_filedir
 
 # Updated completion shipped in cowsay package:
-rm $RPM_BUILD_ROOT%{_datadir}/bash-completion/completions/{cowsay,cowthink}
+rm %{buildroot}%{_datadir}/bash-completion/completions/{cowsay,cowthink}
 
 
 %check
